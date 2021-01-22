@@ -6,19 +6,22 @@ const baseIngredientImageURL = 'https://www.thecocktaildb.com/images/ingredients
 const ingreditenImageSize = 'Medium'
 
 const DrinksContextProvider = ({ children }) => {
-  const [listCategories, setListCategories] = useState([])
   const [listDrinks, setListDrinks] = useState([])
   const [listDrinksFiltered, setListDrinksFiltered] = useState([])
+  
   const [listGlases, setListGlases] = useState([])
+  
+  const [listCategories, setListCategories] = useState([])
   const [listIngredients, setListIngredients] = useState([])
   const [listTypes, setListTypes] = useState([])
+
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
   useEffect(()=>{ 
     getData()
   },[])  
-
+  
   const getData = () => {
     const data = [
       getAllDrinks(), 
@@ -27,9 +30,12 @@ const DrinksContextProvider = ({ children }) => {
       getIngredients(),
     ] 
     Promise.all(data)
-      .then(_ => {
-        setLoading(false)
+      .then(_ => { 
         setError('')
+
+        setTimeout(() => {
+          setLoading(false)
+        }, 2000);
       })
       .catch(_ => setError('Error to get data from server'))
   }
@@ -102,14 +108,15 @@ const DrinksContextProvider = ({ children }) => {
       const drinksWithDetail = listDrinks.map(async(drink) => await getDrink(drink.idDrink)) 
 
       Promise.all(drinksWithDetail).then(drinks => {  
-        setListDrinks(drinks)
-        setListDrinksFiltered(drinks)
+        setListDrinks(drinks) 
         return drinks
       }) 
     }) 
   }
 
-  const getIngredientImage = strIngredient => `${baseIngredientImageURL}/${strIngredient}-${ingreditenImageSize}.png`
+  const getIngredientImage = strIngredient => (
+    `${baseIngredientImageURL}/${strIngredient}-${ingreditenImageSize}.png`
+  )
 
   return (
     <DrinksContext.Provider

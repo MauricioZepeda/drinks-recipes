@@ -30,23 +30,49 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Ingredients = ({listIngredients, listDrinks}) => {
+const Ingredients = ({listIngredients, listDrinks, filterDrinksByIngredients}) => {
   const classes = useStyles()
   const [ingredients, setIngredients] = React.useState([]) 
+  
 
-  const handleChange = (event) => {
-    setIngredients(event.target.value)
+  const handleChange = (event) => { 
+    const ingredientsSelected = event.target.value
+    setIngredients(ingredientsSelected) 
+    filterDrinksByIngredients(ingredientsSelected)
   };
 
   const getCount = ingredientName => { 
     const drinksWithIngredient = listDrinks.filter(drink => {
       const keysIngredients = Object.keys(drink).filter(key => key.includes('strIngredient'))
-      const existIngredient =  keysIngredients.some(keyName => drink[keyName] === ingredientName) 
-      
+      const existIngredient =  keysIngredients.some(keyName => drink[keyName] === ingredientName)  
       return existIngredient
     })   
     return drinksWithIngredient.length 
   } 
+
+  const getBadges = (selected) => { 
+    return(
+      <div className={classes.chips}>
+        {selected.map((value) => { 
+          const count = getCount(value)
+          return(
+            <Badge 
+              key={value} 
+              max={999} 
+              badgeContent={count} 
+              color={ (count > 0) ? "primary" : "error"}
+              showZero
+            >
+              <Chip  
+                label={value} 
+                className={classes.chip} 
+              />
+            </Badge>           
+          )
+        })}
+      </div>
+    )    
+  }
 
   return (
     <div> 
@@ -60,23 +86,7 @@ const Ingredients = ({listIngredients, listDrinks}) => {
           value={ingredients}
           onChange={handleChange}  
           input={<Input id="select-multiple-chip" />}
-          renderValue={(selected) => (
-            <div className={classes.chips}>
-              {selected.map((value) => ( 
-                <Badge 
-                  key={value} 
-                  max={999} 
-                  badgeContent={getCount(value)} 
-                  color="error"
-                >
-                  <Chip  
-                    label={value} 
-                    className={classes.chip} 
-                  />
-                </Badge> 
-              ))}
-            </div>
-          )}
+          renderValue={ selected => getBadges(selected) }
         >
           <MenuItem value="" disabled>
             Select ingredients 

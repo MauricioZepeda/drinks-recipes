@@ -15,29 +15,38 @@ const DrinksContextProvider = ({ children }) => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
-  useEffect(()=>{ 
-    getData()
-  },[])  
+  useEffect(() => getData(), [])  
   
-  const getData = async() => {
-    const getters = [
-      getTypes(),
-      getAllDrinks(getIngredients)
-    ]
-
-    Promise.all(getters)
-      .then( _ => {
-        setError('')  
-      })
+  const getData = async() => (
+    Promise
+      .all([ getTypes(), getAllDrinks(getIngredients) ])
+      .then( _ => setError(''))
       .catch( _ => setError('Error to get data from server')) 
+  )
+
+  const getTypes = async() => { 
+    const listTypesLocalStorage = await Utils.getFromLocalStoge('listTypes') 
+
+    if(listTypesLocalStorage){ 
+      setListTypes(listTypesLocalStorage) 
+      return listTypesLocalStorage
+    } 
+
+    const types = await fetch(`${baseURL}/list.php?a=list`)  
+    const listTypesParsed = await types.json() 
+    const { drinks: listTypes } = listTypesParsed 
+    
+    await Utils.saveOnLocalStoge('listTypes', listTypes) 
+    setListTypes(listTypes)
+    return listTypes 
   }
 
   const getAllDrinks = async(callback) => {
     const listDrinksLocalStorage = await Utils.getFromLocalStoge('listDrinks') 
+
     if(listDrinksLocalStorage){ 
       setAllDrinks(listDrinksLocalStorage) 
-      callback(listDrinksLocalStorage)  
-      
+      callback(listDrinksLocalStorage)   
       return listDrinksLocalStorage
     }
     
@@ -53,7 +62,6 @@ const DrinksContextProvider = ({ children }) => {
         await Utils.saveOnLocalStoge('listDrinks', sortedDrinks) 
         setAllDrinks(sortedDrinks) 
         callback(sortedDrinks) 
-        
         return sortedDrinks
       }) 
     }) 
@@ -85,23 +93,7 @@ const DrinksContextProvider = ({ children }) => {
     })
     const ingredients = keysIngredients.map(keyName => drink[keyName].trim()) 
     return ingredients
-  } 
-
-  const getTypes = async() => { 
-    const listTypesLocalStorage = await Utils.getFromLocalStoge('listTypes') 
-    if(listTypesLocalStorage){ 
-      setListTypes(listTypesLocalStorage) 
-      return listTypesLocalStorage
-    } 
-
-    const types = await fetch(`${baseURL}/list.php?a=list`)  
-    const listTypesParsed = await types.json() 
-    const { drinks: listTypes } = listTypesParsed 
-    
-    await Utils.saveOnLocalStoge('listTypes', listTypes) 
-    setListTypes(listTypes)
-    return listTypes 
-  }
+  }  
 
   const getCategories = async() => {
     const categories = await fetch(`${baseURL}/list.php?c=list`)  

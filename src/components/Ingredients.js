@@ -33,8 +33,7 @@ const useStyles = makeStyles((theme) => ({
 const Ingredients = ({listIngredients, listDrinks, filterDrinksByIngredients}) => {
   const classes = useStyles()
   const [ingredients, setIngredients] = React.useState([]) 
-  
-
+   
   const handleChange = (event) => { 
     const ingredientsSelected = event.target.value
     setIngredients(ingredientsSelected) 
@@ -93,7 +92,7 @@ const Ingredients = ({listIngredients, listDrinks, filterDrinksByIngredients}) =
           </MenuItem>
           { listIngredients.map(ingredient => (
             <MenuItem 
-              key={ingredient.idIngredient} 
+              key={ingredient.strIngredient} 
               value={ingredient.strIngredient}
             >
               {ingredient.strIngredient}

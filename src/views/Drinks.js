@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react'; 
+import { SyncLoader } from 'react-spinners';
 import './styles.css'; 
-import Types from '../components/drinks/Types'
-import Ingredients from '../components/drinks/Ingredients';
-import ListDrinks from '../components/drinks/ListDrinks';
-
-import CircularProgress from '@material-ui/core/CircularProgress'; 
+import Types from '../components/Types'
+import Ingredients from '../components/Ingredients';
+import ListDrinks from '../components/ListDrinks'; 
 
 // Context
 import { DrinksContext } from '../contexts/DrinksContext';  
@@ -16,43 +15,38 @@ const Drinks = () => {
     filterDrinks()
   },[query])
 
-  const {     
-    listCategories,
-    listDrinks,
-    listDrinksFiltered, 
-    listGlases,
+  const {      
+    allDrinks,
+    drinksFiltered,  
     listIngredients,
     listTypes,
     loading,
     error,
-    setListDrinksFiltered
+    setDrinksFiltered
   } = useContext(DrinksContext); 
   
 
-  const filterDrinks = () => {
-      const {types: typesToFilter, ingredients: ingredientesToFilter} = query
+  const filterDrinks = () => {  
+    if(query.types.length === 0 && query.ingredients.length === 0){
+      setDrinksFiltered([]) 
+      return []
+    }
 
-      if(typesToFilter.length === 0 && ingredientesToFilter.length === 0){
-        setListDrinksFiltered([]) 
-        return []
-      }
+    const drinksFilteredByType = (query.types.length > 0) 
+      ? allDrinks.filter(drink => query.types.some(type => type === drink.strAlcoholic))
+      : allDrinks
 
-      const drinksFilteredByType = (typesToFilter.length > 0) 
-        ? listDrinks.filter(drink => typesToFilter.some(type => type === drink.strAlcoholic))
-        : listDrinks
+    const drinksFilteredByIngredients = (query.ingredients.length > 0) 
+    ? drinksFilteredByType.filter(drink => {
+        const keysIngredients = Object.keys(drink).filter(key => key.includes('strIngredient'))
+        const existIngredient = keysIngredients.some(keyName => query.ingredients.includes(drink[keyName]))   
+        return existIngredient 
+      })
+    : drinksFilteredByType 
+    
+    const finalListResult = Array.from(new Set(drinksFilteredByIngredients))
 
-      const drinksFilteredByIngredients = (ingredientesToFilter.length > 0) 
-      ? drinksFilteredByType.filter(drink => {
-          const keysIngredients = Object.keys(drink).filter(key => key.includes('strIngredient'))
-          const existIngredient = keysIngredients.some(keyName => ingredientesToFilter.includes(drink[keyName]))   
-          return existIngredient 
-        })
-      : drinksFilteredByType 
-
-    const listDrinksUnique = new Set(drinksFilteredByIngredients)
-    const finalListResult = Array.from(listDrinksUnique)
-
-    setListDrinksFiltered(finalListResult)
+    setDrinksFiltered(finalListResult)
     return finalListResult
   }
 
@@ -85,25 +79,25 @@ const Drinks = () => {
 
 
 
-  if(loading) return(<CircularProgress />) 
+  if(loading) return(<SyncLoader />) 
   if(error) return(<h1>{error}</h1>) 
   
   return( 
-    <div>  
-      <Types         
-        listTypes={listTypes}  
-        listDrinks={listDrinksFiltered}
-        setListDrinksFiltered={setListDrinksFiltered}
-        filterDrinksByType={filterDrinksByType}
-      />  
-
+    <div>   
       <Ingredients 
-        listDrinks={listDrinksFiltered} 
+        listDrinks={drinksFiltered} 
         listIngredients={listIngredients} 
         filterDrinksByIngredients={filterDrinksByIngredients}
       />
-
-      <ListDrinks listDrinks={listDrinksFiltered} />
+      <br /> 
+      <Types         
+        listTypes={listTypes}  
+        listDrinks={drinksFiltered}
+        setDrinksFiltered={setDrinksFiltered}
+        filterDrinksByType={filterDrinksByType}
+      /> 
+      <br /><br /><br />
+      <ListDrinks listDrinks={drinksFiltered} />
     </div> 
   ) 
 }  

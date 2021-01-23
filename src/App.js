@@ -1,5 +1,5 @@
 import React from 'react'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom' 
 import './App.css'
 
 // PAGES 
@@ -10,11 +10,11 @@ import NotFound from './views/NotFound'
 import DrinksContextProvider from './contexts/DrinksContext'; 
  
 const App = () => ( 
-  <DrinksContextProvider>
+  <DrinksContextProvider> 
     <Switch> 
       <Route exact path='/' component={ Drinks } />   
       <Route component={ NotFound } />
-    </Switch> 
+    </Switch>  
   </DrinksContextProvider>
 );
 

@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -7,9 +6,10 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Chip from '@material-ui/core/Chip'; 
 import Badge from '@material-ui/core/Badge'; 
+import { makeStyles } from '@material-ui/core/styles';
 
 // Context
-import { DrinksContext } from '../contexts/DrinksContext';  
+import { DrinksContext } from '../contexts/DrinksContext'; 
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -45,8 +45,8 @@ const Ingredients = () => {
     const ingredientsSelected = event.target.value
     setIngredients(ingredientsSelected)  
     setQuery({      
-      types: query.types,
-      ingredients: ingredientsSelected
+      ...query,
+      ingredients: ingredientsSelected,
     })
   };
 
@@ -59,10 +59,10 @@ const Ingredients = () => {
     return drinksWithIngredient.length 
   } 
 
-  const getBadges = (selected) => { 
+  const getBadges = (selected) => {  
     return(
       <div className={classes.chips}>
-        {selected.map((value) => { 
+        {selected.sort().map((value) => { 
           const count = getCount(value)
           return(
             <Badge 

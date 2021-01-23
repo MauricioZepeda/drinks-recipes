@@ -1,20 +1,22 @@
-import React, { useContext } from 'react'; 
-import { SyncLoader } from 'react-spinners';
-import './styles.css'; 
+import React, { useContext } from 'react'
+import { SyncLoader } from 'react-spinners'
+import './styles.css'
+import Utils from '../utils'
 
 // Components
+import Search from '../components/Search'
 import Types from '../components/Types'
-import Ingredients from '../components/Ingredients';
-import ListDrinks from '../components/ListDrinks'; 
+import Ingredients from '../components/Ingredients'
+import ListDrinks from '../components/ListDrinks'
 
 // Context
-import { DrinksContext } from '../contexts/DrinksContext';  
+import { DrinksContext } from '../contexts/DrinksContext'
 
 const Drinks = () => {  
-  const {         
+  const {        
     loading,
     error 
-  } = useContext(DrinksContext); 
+  } = useContext(DrinksContext)
   
   if(loading) return(<SyncLoader />) 
   if(error) return(<h1>{error}</h1>) 
@@ -23,11 +25,16 @@ const Drinks = () => {
     <div>   
       <Ingredients />
       <br /> 
-      <Types /> 
+
+      <div>
+        <Search />
+        <Types/> 
+      </div>
       <br /><br /><br />
-      <ListDrinks />
+      
+      <ListDrinks /> 
     </div> 
   ) 
 }  
 
-export default Drinks;
+export default Drinks

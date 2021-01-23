@@ -31,7 +31,11 @@ const ListDrinks = () => {
   } = useContext(DrinksContext); 
 
   const classes = useStyles();
+  
   return ( 
+    <>
+      <OptionsSelected />
+
       <div className={classes.root}>
         <GridList cellHeight={350} className={classes.gridList} cols={5}>
           { drinksFiltered.map(drink => (
@@ -45,7 +49,29 @@ const ListDrinks = () => {
           )) }
         </GridList>
       </div> 
+    </>
   );
+}
+
+const OptionsSelected = ()=>{
+  const {      
+    drinksFiltered,
+    query 
+  } = useContext(DrinksContext); 
+  
+  const getOptions = () => {
+    const { types, ingredients, name } = query
+
+    const existsData = drinksFiltered.length > 0
+    const existsQuery = types !== [] || ingredients !== [] || name !== ''
+
+    const message  = (existsData && existsQuery) ? "Sin datos" : "Bsucando por: "
+    return message
+  }
+
+  return (
+    <h1>opciones {getOptions()} </h1>
+  )
 }
 
 export default ListDrinks;

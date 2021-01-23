@@ -58,28 +58,30 @@ const Type = ({type}) => {
     : [...query.types].filter(typeToFilter => typeToFilter !== strAlcoholic) 
     
     setActive(!active) 
-    setQuery({      
-      types: filters,
-      ingredients: query.ingredients
+    setQuery({ 
+      ...query,     
+      types: filters 
     })
   }
 
-  return ( 
-    <Badge 
-      max={999} 
-      badgeContent={count} 
-      color={ (count > 0) ? "primary" : "error" } 
-      showZero={ active ? true : false }
-    >
-      <Button 
-        variant={ active ? "contained" : "outlined" }
-        color="secondary" 
-        onClick={ handlerClick }
-        id={ type.strAlcoholic }
+  return (
+    <div>
+      <Badge 
+        max={999} 
+        badgeContent={count} 
+        color={ (count > 0) ? "primary" : "error" } 
+        showZero={ active ? true : false }
       >
-        { type.strAlcoholic }
-      </Button>  
-    </Badge>  
+        <Button 
+          variant={ active ? "contained" : "outlined" }
+          color="secondary" 
+          onClick={ handlerClick }
+          id={ type.strAlcoholic }
+        >
+          { type.strAlcoholic }
+        </Button>  
+      </Badge>  
+    </div> 
   )
 }
 

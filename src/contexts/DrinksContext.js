@@ -9,7 +9,7 @@ const baseIngredientImageURL = 'https://www.thecocktaildb.com/images/ingredients
 const DrinksContextProvider = ({ children }) => {
   const [ allDrinks, setAllDrinks ] = useState([])
   const [ drinksFiltered, setDrinksFiltered ] = useState([]) 
-  const [ query, setQuery ] = useState({ types: [], ingredients: [] })
+  const [ query, setQuery ] = useState({ types: [], ingredients: [], name: '' })
 
   const [ listIngredients, setListIngredients ] = useState([])
   const [ listTypes, setListTypes ] = useState([]) 
@@ -27,51 +27,81 @@ const DrinksContextProvider = ({ children }) => {
       .catch( _ => setError('Error to get data from server'))      
   )
 
-  const filterDrinks = async() => {
-    if(query.types.length === 0 && query.ingredients.length === 0){
+  const filterDrinks = async() => { 
+    if(!existQuery()){
       setDrinksFiltered([])
       return []
-    }
+    } 
 
-    const drinksFilteredByType =
-      (query.types.length > 0)
-        ? allDrinks.filter(drink => query.types.some(type => type === drink.strAlcoholic))
-        : allDrinks
+    const filteredResult = await getDrinksFirteredByQuery() 
+    setDrinksFiltered(filteredResult)
 
-    const drinksFilteredByIngredients =
-      (query.ingredients.length > 0)
-        ? drinksFilteredByType.filter(drink => {
-            const keysIngredients = Object.keys(drink).filter(key => key.includes('strIngredient'))
-            const existIngredient = keysIngredients.some(keyName => query.ingredients.includes(drink[keyName]))
-            return existIngredient
-          })
-        : drinksFilteredByType
+    return filteredResult
+  }
 
-    const finalListResult = await Utils.removeDuplicates(drinksFilteredByIngredients)
+  const existQuery = () => {
+    const { types, ingredients, name } = query 
+    return (types.length > 0 || 
+            ingredients.length > 0 ||
+            name.length > 0) 
+  }
 
-    setDrinksFiltered(finalListResult)
+  const getDrinksFirteredByQuery = async() => {
+    const drinksFilteredByType = getDrinksFilteredByType() 
+    const drinksFilteredByIngredients = getDrinksFilteredByIngredients(drinksFilteredByType) 
+    const drinksfilteredByName = getDrinksfilteredByName(drinksFilteredByIngredients) 
+    const finalListResult = await Utils.removeDuplicates(drinksfilteredByName)
+
     return finalListResult
   }
 
+  const getDrinksFilteredByType = () => (
+    (query.types.length > 0)
+        ? allDrinks.filter(drink => query.types.some(type => type === drink.strAlcoholic))
+        : allDrinks
+  )
+
+  const getDrinksFilteredByIngredients = (drinksFilteredByType) => (
+    (query.ingredients.length > 0)
+      ? drinksFilteredByType.filter(drink => {
+          const keysIngredients = Object.keys(drink).filter(key => key.includes('strIngredient'))
+          const existIngredient = keysIngredients.some(keyName => query.ingredients.includes(drink[keyName]))
+          return existIngredient
+        })
+      : drinksFilteredByType
+  )
+
+  const getDrinksfilteredByName = (drinksFilteredByIngredients) => (
+    (query.name !== '') 
+      ? (drinksFilteredByIngredients.filter(drink => { 
+          const drinkName = drink.strDrink.toUpperCase() 
+          return drinkName.includes(query.name.toUpperCase().trim())
+        }))
+      : drinksFilteredByIngredients
+  )
+
   const getTypes = async() => {
-    const listTypesLocalStorage = await Utils.getFromLocalStoge('listTypes')
+    const listTypesLocalStorage = await Utils.getFromLocalStorage('listTypes')
 
     if(listTypesLocalStorage){
       setListTypes(listTypesLocalStorage) 
       return listTypesLocalStorage
-    } 
+    }  
+    return await getTypesFromServer()
+  }
 
+  const getTypesFromServer = async() => {
     const types = await fetch(`${baseURL}/list.php?a=list`)  
     const listTypesParsed = await types.json() 
-    const { drinks: listTypes } = listTypesParsed 
-    
-    await Utils.saveOnLocalStoge('listTypes', listTypes) 
+    const { drinks: listTypes } = listTypesParsed  
+
+    await Utils.saveOnLocalStorage('listTypes', listTypes) 
     setListTypes(listTypes)
-    return listTypes 
+    return listTypes
   }
 
   const getAllDrinks = async(callback) => {
-    const listDrinksLocalStorage = await Utils.getFromLocalStoge('listDrinks') 
+    const listDrinksLocalStorage = await Utils.getFromLocalStorage('listDrinks') 
 
     if(listDrinksLocalStorage){ 
       setAllDrinks(listDrinksLocalStorage) 
@@ -79,16 +109,21 @@ const DrinksContextProvider = ({ children }) => {
       return listDrinksLocalStorage
     }
     
+    return await getAllDrinksFromServer(callback) 
+  }
+
+  const getAllDrinksFromServer = async(callback) => {
     const categories = await getCategories() 
-    const drinksByCategory = categories.map(async(category) => await getDrinksByCategory(category.strCategory))  
+    const drinksByCategories = await getDrinksByCategories(categories)
 
-    Promise.all(drinksByCategory).then(drinks => { 
+    Promise.all(drinksByCategories).then(async(drinks) => { 
       const listDrinks = drinks.flat()   
-      const drinksWithDetail = listDrinks.map(async(drink) => await getDrink(drink.idDrink)) 
+      const listDrinksWithDetails = await getDetailsOfDrinks(listDrinks)
 
-      Promise.all(drinksWithDetail).then(async(drinks) => {   
+      Promise.all(listDrinksWithDetails).then(async(drinks) => {   
         const sortedDrinks = await Utils.sortListBy(drinks, 'strDrink')
-        await Utils.saveOnLocalStoge('listDrinks', sortedDrinks) 
+
+        await Utils.saveOnLocalStorage('listDrinks', sortedDrinks) 
         setAllDrinks(sortedDrinks) 
         callback(sortedDrinks) 
         return sortedDrinks
@@ -96,32 +131,45 @@ const DrinksContextProvider = ({ children }) => {
     }) 
   }
 
+  const getDrinksByCategories = async(categories) => (
+    categories.map(async(category) => await getDrinksByCategory(category.strCategory))  
+  )
+
+  const getDetailsOfDrinks = async(listDrinks) => (
+    listDrinks.map(async(drink) => await getDrink(drink.idDrink)) 
+  )
+
   const getIngredients = async(listDrinks) => { 
-    const listIngredientsLocalStorage = await Utils.getFromLocalStoge('listIngredients')
-    if(listIngredientsLocalStorage){ 
+    const listIngredientsLocalStorage = await Utils.getFromLocalStorage('listIngredients')
+
+    if(listIngredientsLocalStorage){
       setListIngredients(listIngredientsLocalStorage)
       setLoading(false) 
       return listIngredientsLocalStorage
     }
 
+    return await getIngredientsFromListDrinks(listDrinks) 
+  }  
+
+  const getIngredientsFromListDrinks = async(listDrinks) => {
     const ingredientsByDrink = listDrinks.map(drink => getIngredientsByDrink(drink))
     const listAllIngredients = ingredientsByDrink.flat() 
     const listIngredients = await Utils.removeDuplicates(listAllIngredients) 
     const ingredientsWithImage = listIngredients.map(strIngredient => getIngredientWithImage(strIngredient))  
     const sortedIngredients = await Utils.sortListBy(ingredientsWithImage, 'strIngredient')
 
-    await Utils.saveOnLocalStoge('listIngredients', sortedIngredients)  
+    await Utils.saveOnLocalStorage('listIngredients', sortedIngredients)  
     setListIngredients(sortedIngredients)
     setLoading(false)
     return sortedIngredients
-  } 
+  }
 
   const getIngredientsByDrink = drink => {
-    const keysIngredients = Object.keys(drink).filter(key =>{
-      return key.includes('strIngredient') && drink[key] 
-    })
-    const ingredients = keysIngredients.map(keyName => drink[keyName].trim()) 
-    return ingredients
+    const keysIngredients = Object.keys(drink).filter(key => (
+      key.includes('strIngredient') && drink[key] 
+    ))
+    const drinkIngredients = keysIngredients.map(keyName => drink[keyName].trim()) 
+    return drinkIngredients
   }  
 
   const getCategories = async() => {

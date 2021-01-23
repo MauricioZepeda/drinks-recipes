@@ -7,11 +7,11 @@ export default class Utils {
     await Array.from(new Set(list)) 
   )
 
-  static saveOnLocalStoge = async(key, value) => (
+  static saveOnLocalStorage = async(key, value) => (
     await localStorage.setItem(key, JSON.stringify(value)) 
   )
 
-  static getFromLocalStoge = async(key) => (
+  static getFromLocalStorage = async(key) => (
     await JSON.parse(localStorage.getItem(key))
   )
 }

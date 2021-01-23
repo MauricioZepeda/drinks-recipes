@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';  
- 
-import GridListTileBar from '@material-ui/core/GridListTileBar';   
+import GridListTile from '@material-ui/core/GridListTile';    
+import GridListTileBar from '@material-ui/core/GridListTileBar'; 
 
 import Drink from "./Drink";
 
+// Context
+import { DrinksContext } from '../contexts/DrinksContext';  
+ 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -23,12 +25,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ListDrinks = ({listDrinks}) => {
+const ListDrinks = () => {
+  const {      
+    drinksFiltered 
+  } = useContext(DrinksContext); 
+
   const classes = useStyles();
   return ( 
       <div className={classes.root}>
         <GridList cellHeight={350} className={classes.gridList} cols={5}>
-          { listDrinks.map(drink => (
+          { drinksFiltered.map(drink => (
             <GridListTile key={drink.idDrink} cols={ 1 }>
               <img src={drink.strDrinkThumb} alt={drink.strDrink} />
               <GridListTileBar

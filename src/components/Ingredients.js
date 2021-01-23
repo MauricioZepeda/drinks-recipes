@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import Chip from '@material-ui/core/Chip';
-
+import Chip from '@material-ui/core/Chip'; 
 import Badge from '@material-ui/core/Badge'; 
 
+// Context
+import { DrinksContext } from '../contexts/DrinksContext';  
+ 
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
@@ -28,20 +30,28 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
   },
 }));
-
-
-const Ingredients = ({listIngredients, listDrinks, filterDrinksByIngredients}) => {
-  const classes = useStyles()
+ 
+const Ingredients = () => { 
   const [ingredients, setIngredients] = React.useState([]) 
-   
+  const {       
+    drinksFiltered,  
+    listIngredients, 
+    query, 
+    setQuery 
+  } = useContext(DrinksContext);  
+  const classes = useStyles()
+  
   const handleChange = (event) => { 
     const ingredientsSelected = event.target.value
-    setIngredients(ingredientsSelected) 
-    filterDrinksByIngredients(ingredientsSelected)
+    setIngredients(ingredientsSelected)  
+    setQuery({      
+      types: query.types,
+      ingredients: ingredientsSelected
+    })
   };
 
   const getCount = ingredientName => { 
-    const drinksWithIngredient = listDrinks.filter(drink => {
+    const drinksWithIngredient = drinksFiltered.filter(drink => {
       const keysIngredients = Object.keys(drink).filter(key => key.includes('strIngredient'))
       const existIngredient =  keysIngredients.some(keyName => drink[keyName] === ingredientName)  
       return existIngredient

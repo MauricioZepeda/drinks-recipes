@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react'; 
+import React, { useEffect, useState, useContext } from 'react'; 
 import Button from '@material-ui/core/Button';
 import Badge from '@material-ui/core/Badge'; 
 import { makeStyles } from '@material-ui/core/styles';
+
+// Context
+import { DrinksContext } from '../contexts/DrinksContext';
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -10,7 +13,11 @@ const useStyles = makeStyles(() => ({
   } 
 }));
 
-const Types = ({listTypes, listDrinks, filterDrinksByType}) => {
+const Types = () => {
+  const {      
+    drinksFiltered,   
+    listTypes 
+  } = useContext(DrinksContext);  
   const classes = useStyles()
   
   return ( 
@@ -19,36 +26,44 @@ const Types = ({listTypes, listDrinks, filterDrinksByType}) => {
         <Type 
           key={type.strAlcoholic}  
           type={type}
-          listDrinks={listDrinks} 
-          filterDrinksByType={filterDrinksByType}
+          drinksFiltered={drinksFiltered}  
         /> 
       )) }
     </div>
   )
 }
 
-const Type = ({type, listDrinks, filterDrinksByType}) => { 
+const Type = ({type, drinksFiltered}) => { 
   const [active, setActive] = useState(false)
   const [count, setCount] = useState(0)
 
   useEffect(()=>{ 
     const total = active ? getCount() : 0
     setCount(total)
-  },[filterDrinksByType])
+  },[drinksFiltered])
+
+  const {      
+    query, 
+    setQuery
+  } = useContext(DrinksContext); 
 
   const getCount = () => { 
-    const filteredByType = listDrinks.filter(drink =>  drink.strAlcoholic === type.strAlcoholic)
+    const filteredByType = drinksFiltered.filter(drink =>  drink.strAlcoholic === type.strAlcoholic)
     return filteredByType.length 
   }
 
   const handlerClick = (event) => {
     const strAlcoholic = event.target.id || event.target.innerHTML  
-    const filter = {
-      type: strAlcoholic,
-      active : !active
-    }
-    filterDrinksByType(filter)
-    setActive(!active)
+
+    const filters = (!active)
+    ? [...query.types, strAlcoholic] 
+    : [...query.types].filter(typeSaved => typeSaved !== strAlcoholic) 
+    
+    setActive(!active) 
+    setQuery({      
+      types: filters,
+      ingredients: query.ingredients
+    })
   }
 
   return ( 

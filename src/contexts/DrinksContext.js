@@ -6,23 +6,51 @@ const baseURL = "https://www.thecocktaildb.com/api/json/v1/1"
 const baseIngredientImageURL = 'https://www.thecocktaildb.com/images/ingredients'
 
 const DrinksContextProvider = ({ children }) => {
-  const [allDrinks, setAllDrinks] = useState([])
-  const [drinksFiltered, setDrinksFiltered] = useState([]) 
-  
-  const [listIngredients, setListIngredients] = useState([])
-  const [listTypes, setListTypes] = useState([]) 
+  const [ allDrinks, setAllDrinks ] = useState([])
+  const [ drinksFiltered, setDrinksFiltered ] = useState([]) 
+  const [ query, setQuery ] = useState({ types: [], ingredients: [] })
 
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const [ listIngredients, setListIngredients ] = useState([])
+  const [ listTypes, setListTypes ] = useState([]) 
+
+  const [ loading, setLoading ] = useState(true)
+  const [ error, setError ] = useState('')
 
   useEffect(() => getData(), [])  
-  
+  useEffect(() => filterDrinks(), [query])  
+   
   const getData = async() => (
     Promise
       .all([ getTypes(), getAllDrinks(getIngredients) ])
       .then( _ => setError(''))
       .catch( _ => setError('Error to get data from server')) 
   )
+
+  const filterDrinks = async() => {  
+    if(query.types.length === 0 && query.ingredients.length === 0){
+      setDrinksFiltered([]) 
+      return []
+    }
+
+    const drinksFilteredByType = 
+      (query.types.length > 0) 
+        ? allDrinks.filter(drink => query.types.some(type => type === drink.strAlcoholic))
+        : allDrinks
+
+    const drinksFilteredByIngredients = 
+      (query.ingredients.length > 0) 
+        ? drinksFilteredByType.filter(drink => {
+            const keysIngredients = Object.keys(drink).filter(key => key.includes('strIngredient'))
+            const existIngredient = keysIngredients.some(keyName => query.ingredients.includes(drink[keyName]))   
+            return existIngredient 
+          })
+        : drinksFilteredByType 
+    
+    const finalListResult = await Utils.removeDuplicates(drinksFilteredByIngredients)
+
+    setDrinksFiltered(finalListResult)
+    return finalListResult
+  } 
 
   const getTypes = async() => { 
     const listTypesLocalStorage = await Utils.getFromLocalStoge('listTypes') 
@@ -130,7 +158,9 @@ const DrinksContextProvider = ({ children }) => {
         listTypes,
         loading,
         error,
-        setDrinksFiltered
+        query, 
+        setDrinksFiltered,
+        setQuery 
       }}
     >
       {children}

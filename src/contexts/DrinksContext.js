@@ -1,4 +1,5 @@
 import React, { useState, useEffect, createContext } from "react" 
+import Utils from '../utils'
 
 export const DrinksContext = createContext() 
 const baseURL = "https://www.thecocktaildb.com/api/json/v1/1"
@@ -7,8 +8,7 @@ const baseIngredientImageURL = 'https://www.thecocktaildb.com/images/ingredients
 const DrinksContextProvider = ({ children }) => {
   const [allDrinks, setAllDrinks] = useState([])
   const [drinksFiltered, setDrinksFiltered] = useState([]) 
-
-  const [listCategories, setListCategories] = useState([])
+  
   const [listIngredients, setListIngredients] = useState([])
   const [listTypes, setListTypes] = useState([]) 
 
@@ -19,22 +19,28 @@ const DrinksContextProvider = ({ children }) => {
     getData()
   },[])  
   
-  const getData = () => {
-    const data = [
-      getAllDrinks(getIngredients), 
-      getTypes(),     
-    ] 
-    Promise.all(data)
-      .then(_ => { 
-        setError('')
-        setTimeout(() => {
-          setLoading(false)           
-        }, 2000);
+  const getData = async() => {
+    const getters = [
+      getTypes(),
+      getAllDrinks(getIngredients)
+    ]
+
+    Promise.all(getters)
+      .then( _ => {
+        setError('')  
       })
-      .catch(_ => setError('Error to get data from server'))
+      .catch( _ => setError('Error to get data from server')) 
   }
 
-  const getAllDrinks = async(getIngredients) => {
+  const getAllDrinks = async(callback) => {
+    const listDrinksLocalStorage = await Utils.getFromLocalStoge('listDrinks') 
+    if(listDrinksLocalStorage){ 
+      setAllDrinks(listDrinksLocalStorage) 
+      callback(listDrinksLocalStorage)  
+      
+      return listDrinksLocalStorage
+    }
+    
     const categories = await getCategories() 
     const drinksByCategory = categories.map(async(category) => await getDrinksByCategory(category.strCategory))  
 
@@ -42,32 +48,36 @@ const DrinksContextProvider = ({ children }) => {
       const listDrinks = drinks.flat()   
       const drinksWithDetail = listDrinks.map(async(drink) => await getDrink(drink.idDrink)) 
 
-      Promise.all(drinksWithDetail).then(drinks => {  
-        const sortedDrinks = drinks.sort((a, b) => a.strDrink.localeCompare(b.strDrink))
+      Promise.all(drinksWithDetail).then(async(drinks) => {   
+        const sortedDrinks = await Utils.sortListBy(drinks, 'strDrink')
+        await Utils.saveOnLocalStoge('listDrinks', sortedDrinks) 
         setAllDrinks(sortedDrinks) 
-        getIngredients(sortedDrinks)
+        callback(sortedDrinks) 
+        
         return sortedDrinks
       }) 
     }) 
   }
 
-  const getIngredients = async(listDrinks) => {
+  const getIngredients = async(listDrinks) => { 
+    const listIngredientsLocalStorage = await Utils.getFromLocalStoge('listIngredients')
+    if(listIngredientsLocalStorage){ 
+      setListIngredients(listIngredientsLocalStorage)
+      setLoading(false) 
+      return listIngredientsLocalStorage
+    }
+
     const ingredientsByDrink = listDrinks.map(drink => getIngredientsByDrink(drink))
     const listAllIngredients = ingredientsByDrink.flat() 
-    const ingredients = Array.from(new Set(listAllIngredients))
-    
-    const ingredientsWithImage = ingredients.map(strIngredient => (
-      {
-        strIngredient: strIngredient,
-        image: getIngredientImage(strIngredient)
-      }
-    )) 
+    const listIngredients = await Utils.removeDuplicates(listAllIngredients) 
+    const ingredientsWithImage = listIngredients.map(strIngredient => getIngredientWithImage(strIngredient))  
+    const sortedIngredients = await Utils.sortListBy(ingredientsWithImage, 'strIngredient')
 
-    const sortedIngredients = ingredientsWithImage.sort((a, b) => a.strIngredient.localeCompare(b.strIngredient))
-
+    await Utils.saveOnLocalStoge('listIngredients', sortedIngredients)  
     setListIngredients(sortedIngredients)
+    setLoading(false)
     return sortedIngredients
-  }
+  } 
 
   const getIngredientsByDrink = drink => {
     const keysIngredients = Object.keys(drink).filter(key =>{
@@ -75,21 +85,28 @@ const DrinksContextProvider = ({ children }) => {
     })
     const ingredients = keysIngredients.map(keyName => drink[keyName].trim()) 
     return ingredients
-  }
+  } 
 
-  const getTypes = async() => {
+  const getTypes = async() => { 
+    const listTypesLocalStorage = await Utils.getFromLocalStoge('listTypes') 
+    if(listTypesLocalStorage){ 
+      setListTypes(listTypesLocalStorage) 
+      return listTypesLocalStorage
+    } 
+
     const types = await fetch(`${baseURL}/list.php?a=list`)  
     const listTypesParsed = await types.json() 
     const { drinks: listTypes } = listTypesParsed 
+    
+    await Utils.saveOnLocalStoge('listTypes', listTypes) 
     setListTypes(listTypes)
-    return listTypes
+    return listTypes 
   }
 
   const getCategories = async() => {
     const categories = await fetch(`${baseURL}/list.php?c=list`)  
     const listCategoriesParsed = await categories.json() 
-    const { drinks: listCategories } = listCategoriesParsed 
-    setListCategories(listCategories)
+    const { drinks: listCategories } = listCategoriesParsed  
     return listCategories
   }
 
@@ -107,9 +124,10 @@ const DrinksContextProvider = ({ children }) => {
     return drinks[0]   
   }
 
-  const getIngredientImage = strIngredient => (
-    `${baseIngredientImageURL}/${strIngredient}-Medium.png`
-  ) 
+  const getIngredientWithImage = strIngredient => ({
+    strIngredient,
+    image:`${baseIngredientImageURL}/${strIngredient}-Medium.png`
+  }) 
 
   return (
     <DrinksContext.Provider

@@ -10,7 +10,7 @@ import Badge from '@material-ui/core/Badge';
 
 // Context
 import { DrinksContext } from '../contexts/DrinksContext';  
- 
+
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
   },
 }));
- 
+
 const Ingredients = () => { 
   const [ingredients, setIngredients] = React.useState([]) 
   const {       

@@ -14,28 +14,26 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Types = () => {
-  const {      
-    drinksFiltered,   
-    listTypes 
-  } = useContext(DrinksContext);  
-  const classes = useStyles()
-  
+  const { listTypes } = useContext(DrinksContext);  
+  const classes = useStyles() 
+
   return ( 
     <div className={classes.container}> 
       { listTypes.map(type => (
         <Type 
           key={type.strAlcoholic}  
-          type={type}
-          drinksFiltered={drinksFiltered}  
+          type={type} 
         /> 
       )) }
     </div>
   )
 }
 
-const Type = ({type, drinksFiltered}) => { 
+const Type = ({type}) => { 
   const [active, setActive] = useState(false)
   const [count, setCount] = useState(0)
+
+  const { drinksFiltered } = useContext(DrinksContext); 
 
   useEffect(()=>{ 
     const total = active ? getCount() : 0
@@ -48,7 +46,7 @@ const Type = ({type, drinksFiltered}) => {
   } = useContext(DrinksContext); 
 
   const getCount = () => { 
-    const filteredByType = drinksFiltered.filter(drink =>  drink.strAlcoholic === type.strAlcoholic)
+    const filteredByType = drinksFiltered.filter(drink => drink.strAlcoholic === type.strAlcoholic)
     return filteredByType.length 
   }
 
@@ -57,7 +55,7 @@ const Type = ({type, drinksFiltered}) => {
 
     const filters = (!active)
     ? [...query.types, strAlcoholic] 
-    : [...query.types].filter(typeSaved => typeSaved !== strAlcoholic) 
+    : [...query.types].filter(typeToFilter => typeToFilter !== strAlcoholic) 
     
     setActive(!active) 
     setQuery({      

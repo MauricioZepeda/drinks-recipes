@@ -19,14 +19,14 @@ const Drink = ({drink})=> {
     <GridListTile key={idDrink} cols={ 1 }>
       <img src={strDrinkThumb} alt={strDrink} /> 
       <GridListTileBar
-              title={strDrink}
-              subtitle={<span>Type: strCategory</span>}
-              actionIcon={
-                <IconButton aria-label={`info about ${strDrink}`} className={classes.icon}>
-                  <InfoIcon />
-                </IconButton>
-              }
-            />
+        title={strDrink}
+        subtitle={<span>Type: strCategory</span>}
+        actionIcon={
+          <IconButton aria-label={`info about ${strDrink}`} className={classes.icon}>
+            <InfoIcon />
+          </IconButton>
+        }
+      />
     </GridListTile>
   );
 }

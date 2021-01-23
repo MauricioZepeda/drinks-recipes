@@ -4,11 +4,11 @@ import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';    
 import GridListTileBar from '@material-ui/core/GridListTileBar'; 
 
-import Drink from "./Drink";
+// import Drink from "./Drink";
 
 // Context
-import { DrinksContext } from '../contexts/DrinksContext';  
- 
+import { DrinksContext } from '../contexts/DrinksContext'; 
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',

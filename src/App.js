@@ -2,11 +2,11 @@ import React from 'react'
 import { Switch, Route } from 'react-router-dom' 
 import './App.css'
 
-// PAGES 
+// Views 
 import Drinks from './views/Drinks'
 import NotFound from './views/NotFound'
 
-// CONTEXTS
+// Context
 import DrinksContextProvider from './contexts/DrinksContext'; 
  
 const App = () => ( 

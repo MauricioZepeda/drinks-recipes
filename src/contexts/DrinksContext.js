@@ -1,7 +1,8 @@
 import React, { useState, useEffect, createContext } from "react" 
 import Utils from '../utils'
 
-export const DrinksContext = createContext() 
+export const DrinksContext = createContext()
+
 const baseURL = "https://www.thecocktaildb.com/api/json/v1/1"
 const baseIngredientImageURL = 'https://www.thecocktaildb.com/images/ingredients'
 
@@ -18,44 +19,44 @@ const DrinksContextProvider = ({ children }) => {
 
   useEffect(() => getData(), [])  
   useEffect(() => filterDrinks(), [query])  
-   
+
   const getData = async() => (
     Promise
       .all([ getTypes(), getAllDrinks(getIngredients) ])
       .then( _ => setError(''))
-      .catch( _ => setError('Error to get data from server')) 
+      .catch( _ => setError('Error to get data from server'))      
   )
 
-  const filterDrinks = async() => {  
+  const filterDrinks = async() => {
     if(query.types.length === 0 && query.ingredients.length === 0){
-      setDrinksFiltered([]) 
+      setDrinksFiltered([])
       return []
     }
 
-    const drinksFilteredByType = 
-      (query.types.length > 0) 
+    const drinksFilteredByType =
+      (query.types.length > 0)
         ? allDrinks.filter(drink => query.types.some(type => type === drink.strAlcoholic))
         : allDrinks
 
-    const drinksFilteredByIngredients = 
-      (query.ingredients.length > 0) 
+    const drinksFilteredByIngredients =
+      (query.ingredients.length > 0)
         ? drinksFilteredByType.filter(drink => {
             const keysIngredients = Object.keys(drink).filter(key => key.includes('strIngredient'))
-            const existIngredient = keysIngredients.some(keyName => query.ingredients.includes(drink[keyName]))   
-            return existIngredient 
+            const existIngredient = keysIngredients.some(keyName => query.ingredients.includes(drink[keyName]))
+            return existIngredient
           })
-        : drinksFilteredByType 
-    
+        : drinksFilteredByType
+
     const finalListResult = await Utils.removeDuplicates(drinksFilteredByIngredients)
 
     setDrinksFiltered(finalListResult)
     return finalListResult
-  } 
+  }
 
-  const getTypes = async() => { 
-    const listTypesLocalStorage = await Utils.getFromLocalStoge('listTypes') 
+  const getTypes = async() => {
+    const listTypesLocalStorage = await Utils.getFromLocalStoge('listTypes')
 
-    if(listTypesLocalStorage){ 
+    if(listTypesLocalStorage){
       setListTypes(listTypesLocalStorage) 
       return listTypesLocalStorage
     } 
@@ -165,7 +166,7 @@ const DrinksContextProvider = ({ children }) => {
     >
       {children}
     </DrinksContext.Provider>
-  );
-};
+  )
+}
 
 export default DrinksContextProvider

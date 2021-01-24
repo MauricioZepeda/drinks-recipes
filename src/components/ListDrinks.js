@@ -1,54 +1,30 @@
 import React, { useContext } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';    
-import GridListTileBar from '@material-ui/core/GridListTileBar'; 
+import { makeStyles } from '@material-ui/core/styles'; 
 
-// import Drink from "./Drink";
+import Grid from '@material-ui/core/Grid';
+
+// Components
+import Drink from "./Drink";
 
 // Context
 import { DrinksContext } from '../contexts/DrinksContext'; 
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    overflow: 'hidden' 
-  },
-  gridList: {
-    width: '100%',
-    height: '100%',
-  },
-  icon: {
-    color: 'rgba(255, 255, 255, 0.54)',
-  },
-}));
-
+ 
 const ListDrinks = () => {
   const {      
     drinksFiltered 
   } = useContext(DrinksContext); 
-
-  const classes = useStyles();
   
   return ( 
-    <>
-      <OptionsSelected />
+    <> 
+      <Grid container justify="center">
+        <OptionsSelected />
+      </Grid>
 
-      <div className={classes.root}>
-        <GridList cellHeight={350} className={classes.gridList} cols={5}>
-          { drinksFiltered.map(drink => (
-            <GridListTile key={drink.idDrink} cols={ 1 }>
-              <img src={drink.strDrinkThumb} alt={drink.strDrink} />
-              <GridListTileBar
-              title={drink.strDrink}
-              subtitle={<span>Type: {drink.strCategory}</span>}
-              ></GridListTileBar>
-            </GridListTile>
-          )) }
-        </GridList>
-      </div> 
+      <Grid container justify="space-around" >
+        { drinksFiltered.map(drink => (  
+          <Drink key={drink.idDrink} drink={drink} />  
+        )) } 
+      </Grid> 
     </>
   );
 }
@@ -60,17 +36,21 @@ const OptionsSelected = ()=>{
   } = useContext(DrinksContext); 
   
   const getOptions = () => {
-    const { types, ingredients, name } = query
+    const { types, ingredients, name, favorite } = query
 
     const existsData = drinksFiltered.length > 0
-    const existsQuery = types !== [] || ingredients !== [] || name !== ''
+    const existsQuery = types.length > 0 || ingredients.length > 0 || name.length > 0 
 
-    const message  = (existsData && existsQuery) ? "Sin datos" : "Bsucando por: "
+    const message  = (existsData && existsQuery) 
+                      ? `${drinksFiltered.length} drinks found ${ favorite ? 'on favorites' : ''  }`
+                      : ( existsQuery 
+                          ? `No drinks found ${ favorite ? 'on favorites' : ''}`
+                          : `${ favorite ? drinksFiltered.length +' drinks on favorites' : "Enter your search"  }` )
     return message
   }
 
   return (
-    <h1>opciones {getOptions()} </h1>
+    <h1>{getOptions()} </h1>
   )
 }
 

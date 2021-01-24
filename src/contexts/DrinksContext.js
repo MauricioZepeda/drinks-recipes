@@ -9,45 +9,62 @@ const baseIngredientImageURL = 'https://www.thecocktaildb.com/images/ingredients
 const DrinksContextProvider = ({ children }) => {
   const [ allDrinks, setAllDrinks ] = useState([])
   const [ drinksFiltered, setDrinksFiltered ] = useState([]) 
-  const [ query, setQuery ] = useState({ types: [], ingredients: [], name: '' })
+  const [ query, setQuery ] = useState({ types: [], ingredients: [], name: '', favorite: false})
 
   const [ listIngredients, setListIngredients ] = useState([])
   const [ listTypes, setListTypes ] = useState([]) 
+
+  const [ listFavorites, setListFavorites ] = useState([]) 
 
   const [ loading, setLoading ] = useState(true)
   const [ error, setError ] = useState('')
 
   useEffect(() => getData(), [])  
-  useEffect(() => filterDrinks(), [query])  
+  useEffect(() => filterDrinks(), [query, listFavorites])  
 
   const getData = async() => (
     Promise
-      .all([ getTypes(), getAllDrinks(getIngredients) ])
+      .all([ getTypes(), getFavorites(), getAllDrinks(getIngredients) ])
       .then( _ => setError(''))
       .catch( _ => setError('Error to get data from server'))      
   )
 
-  const filterDrinks = async() => { 
-    if(!existQuery()){
-      setDrinksFiltered([])
-      return []
-    } 
 
-    const filteredResult = await getDrinksFirteredByQuery() 
+  const getFavorites = async() => {
+    const favorites = await Utils.getFromLocalStorage('listFavorites')
+    if(favorites){
+      setListFavorites(favorites)  
+      return favorites
+    }  
+
+    setListFavorites([])
+    return []
+  }
+
+  const filterDrinks = async() => { 
+    if(!existQuery() && !query.favorite){
+      setDrinksFiltered([])
+      console.log('sss')
+      return []
+    }  
+  
+    const filteredResult = await getDrinksFilteredByQuery() 
     setDrinksFiltered(filteredResult)
 
     return filteredResult
   }
 
   const existQuery = () => {
-    const { types, ingredients, name } = query 
+    const { types, ingredients, name } = query  
+
     return (types.length > 0 || 
             ingredients.length > 0 ||
             name.length > 0) 
   }
 
-  const getDrinksFirteredByQuery = async() => {
-    const drinksFilteredByType = getDrinksFilteredByType() 
+  const getDrinksFilteredByQuery = async() => {
+ 
+    const drinksFilteredByType = query.favorite ? listFavorites : getDrinksFilteredByType() 
     const drinksFilteredByIngredients = getDrinksFilteredByIngredients(drinksFilteredByType) 
     const drinksfilteredByName = getDrinksfilteredByName(drinksFilteredByIngredients) 
     const finalListResult = await Utils.removeDuplicates(drinksfilteredByName)
@@ -72,7 +89,7 @@ const DrinksContextProvider = ({ children }) => {
   )
 
   const getDrinksfilteredByName = (drinksFilteredByIngredients) => (
-    (query.name !== '') 
+    (query.name.length >0) 
       ? (drinksFilteredByIngredients.filter(drink => { 
           const drinkName = drink.strDrink.toUpperCase() 
           return drinkName.includes(query.name.toUpperCase().trim())
@@ -164,11 +181,11 @@ const DrinksContextProvider = ({ children }) => {
     return sortedIngredients
   }
 
-  const getIngredientsByDrink = drink => {
+  const getIngredientsByDrink = drink => { 
     const keysIngredients = Object.keys(drink).filter(key => (
       key.includes('strIngredient') && drink[key] 
     ))
-    const drinkIngredients = keysIngredients.map(keyName => drink[keyName].trim()) 
+    const drinkIngredients = keysIngredients.map(key => drink[key].trim()) 
     return drinkIngredients
   }  
 
@@ -205,10 +222,14 @@ const DrinksContextProvider = ({ children }) => {
         drinksFiltered, 
         listIngredients,
         listTypes,
+        listFavorites,
         loading,
         error,
         query, 
+        getIngredientsByDrink,
+        getFavorites,
         setDrinksFiltered,
+        setListFavorites,
         setQuery 
       }}
     >

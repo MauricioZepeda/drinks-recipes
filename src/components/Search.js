@@ -15,6 +15,7 @@ const Search = () => {
 
     setQuery({      
       ...query,
+      favorite: false,
       name
     })
   }
@@ -25,6 +26,7 @@ const Search = () => {
         label="Filter by Name" 
         variant="outlined" 
         onChange={handlerChange}
+        value={query.name}
       />
     </div> 
   );

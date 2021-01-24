@@ -6,11 +6,9 @@ import { makeStyles } from '@material-ui/core/styles';
 // Context
 import { DrinksContext } from '../contexts/DrinksContext';
 
-const useStyles = makeStyles(() => ({
-  container: {
-    display: 'flex',
-    justifyContent: 'space-around'
-  } 
+import Grid from '@material-ui/core/Grid';
+
+const useStyles = makeStyles(() => ({ 
 }));
 
 const Types = () => {
@@ -18,14 +16,14 @@ const Types = () => {
   const classes = useStyles() 
 
   return ( 
-    <div className={classes.container}> 
+    <Grid container justify="center">
       { listTypes.map(type => (
         <Type 
           key={type.strAlcoholic}  
           type={type} 
         /> 
       )) }
-    </div>
+    </Grid>
   )
 }
 
@@ -35,16 +33,22 @@ const Type = ({type}) => {
 
   const { drinksFiltered } = useContext(DrinksContext); 
 
-  useEffect(()=>{ 
-    const total = active ? getCount() : 0
-    setCount(total)
-  },[drinksFiltered])
-
   const {      
     query, 
     setQuery
   } = useContext(DrinksContext); 
 
+  useEffect(()=>{ 
+    const total = active ? getCount() : 0
+    setCount(total)
+  },[drinksFiltered])
+
+  useEffect(()=>{ 
+    if(query.favorite){
+      setActive(false) 
+    } 
+  },[query])
+  
   const getCount = () => { 
     const filteredByType = drinksFiltered.filter(drink => drink.strAlcoholic === type.strAlcoholic)
     return filteredByType.length 
@@ -59,29 +63,28 @@ const Type = ({type}) => {
     
     setActive(!active) 
     setQuery({ 
-      ...query,     
+      ...query, 
+      favorite: false,    
       types: filters 
     })
   }
 
-  return (
-    <div>
-      <Badge 
-        max={999} 
-        badgeContent={count} 
-        color={ (count > 0) ? "primary" : "error" } 
-        showZero={ active ? true : false }
+  return ( 
+    <Badge 
+      max={999} 
+      badgeContent={count} 
+      color={ (count > 0) ? "primary" : "error" } 
+      showZero={ active ? true : false }
+    >
+      <Button 
+        variant={ active ? "contained" : "outlined" }
+        color="secondary" 
+        onClick={ handlerClick }
+        id={ type.strAlcoholic }
       >
-        <Button 
-          variant={ active ? "contained" : "outlined" }
-          color="secondary" 
-          onClick={ handlerClick }
-          id={ type.strAlcoholic }
-        >
-          { type.strAlcoholic }
-        </Button>  
-      </Badge>  
-    </div> 
+        { type.strAlcoholic }
+      </Button>  
+    </Badge>  
   )
 }
 

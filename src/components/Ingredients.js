@@ -46,6 +46,7 @@ const Ingredients = () => {
     setIngredients(ingredientsSelected)  
     setQuery({      
       ...query,
+      favorite: false,
       ingredients: ingredientsSelected,
     })
   };
@@ -60,6 +61,11 @@ const Ingredients = () => {
   } 
 
   const getBadges = (selected) => {  
+    if(query.favorite){ 
+      setIngredients([])
+      return null
+    }
+
     return(
       <div className={classes.chips}>
         {selected.sort().map((value) => { 

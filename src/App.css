@@ -1,3 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+Thambi+2&display=swap');  
+
+body{  
+  font-family:  'Baloo Thambi 2', cursive ;
+    height: 100%;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background: rgb(173,206,227);
+    background: linear-gradient(90deg, rgba(173,206,227,1) 0%, rgba(128,168,157,1) 31%, rgba(163,136,123,1) 100%);
+}
+
+.navbar {
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background: rgb(17, 17, 17);
+  background: linear-gradient(75deg, rgb(202, 202, 207) 0%, rgb(179, 189, 185) 31%, rgb(206, 201, 201) 100%);
+}
+
 .App {
   text-align: center; 
 }

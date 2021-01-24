@@ -24,7 +24,7 @@ const Search = () => {
     <div>
       <TextField 
         label="Filter by Name" 
-        variant="outlined" 
+        variant="filled" 
         onChange={handlerChange}
         value={query.name}
       />

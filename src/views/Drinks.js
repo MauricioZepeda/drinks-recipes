@@ -4,6 +4,8 @@ import './styles.css'
 
 import Badge from '@material-ui/core/Badge'; 
 import Button from '@material-ui/core/Button';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
 
 // Components
 import Search from '../components/Search'
@@ -25,19 +27,23 @@ const Drinks = () => {
   if(loading) return(<SyncLoader />) 
   if(error) return(<h1>{error}</h1>) 
   
-  return( 
-    
-    <div>    
-      <Grid container justify="space-between">
-        <Search />
-        <Types /> 
-        <Favorite />
-      </Grid> 
-      <br /> 
-      <Ingredients />
+  return(  
+    <div>     
+      <AppBar className='navbar' position="fixed" color='default'>
+        <Toolbar>          
+          <Grid container justify="space-around"  style={{ padding: 20 }}>
+            <Search />
+            <Types /> 
+            <Favorite />
+          </Grid> 
+        </Toolbar>
+      </AppBar>
+      <br /><br /><br /><br /><br />
+      <Grid container justify="center">
+        <Ingredients /> 
+      </Grid>
 
-      <br />     
-      <ListDrinks /> 
+      <ListDrinks />  
     </div> 
   ) 
 }  

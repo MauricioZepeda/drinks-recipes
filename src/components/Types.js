@@ -16,14 +16,14 @@ const Types = () => {
   const classes = useStyles() 
 
   return ( 
-    <Grid container justify="center">
+    <>
       { listTypes.map(type => (
         <Type 
           key={type.strAlcoholic}  
           type={type} 
         /> 
       )) }
-    </Grid>
+    </>
   )
 }
 

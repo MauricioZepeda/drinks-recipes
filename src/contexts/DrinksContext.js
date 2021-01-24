@@ -43,8 +43,7 @@ const DrinksContextProvider = ({ children }) => {
 
   const filterDrinks = async() => { 
     if(!existQuery() && !query.favorite){
-      setDrinksFiltered([])
-      console.log('sss')
+      setDrinksFiltered([]) 
       return []
     }  
   
@@ -63,7 +62,6 @@ const DrinksContextProvider = ({ children }) => {
   }
 
   const getDrinksFilteredByQuery = async() => {
- 
     const drinksFilteredByType = query.favorite ? listFavorites : getDrinksFilteredByType() 
     const drinksFilteredByIngredients = getDrinksFilteredByIngredients(drinksFilteredByType) 
     const drinksfilteredByName = getDrinksfilteredByName(drinksFilteredByIngredients) 

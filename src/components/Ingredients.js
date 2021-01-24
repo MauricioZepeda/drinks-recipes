@@ -12,6 +12,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import { DrinksContext } from '../contexts/DrinksContext'; 
 
 const useStyles = makeStyles((theme) => ({
+  container:{
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    width: '88%', 
+  },
   formControl: {
     margin: theme.spacing(1),
     width: '100%', 
@@ -90,7 +96,7 @@ const Ingredients = () => {
   }
 
   return (
-    <div> 
+    <div className={classes.container}> 
       <FormControl className={classes.formControl}>
         <InputLabel> 
             Select ingredients 

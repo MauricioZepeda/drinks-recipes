@@ -1,5 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';  
-import { makeStyles } from "@material-ui/core/styles";
+
+// Utils
+import Utils from '../utils';
+
+// Context
+import { DrinksContext } from '../contexts/DrinksContext'; 
+
+// Material-UI
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia"; 
 import CardContent from "@material-ui/core/CardContent";
@@ -9,11 +16,9 @@ import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
+import { makeStyles } from "@material-ui/core/styles"; 
 
-import { DrinksContext } from '../contexts/DrinksContext'; 
-import Utils from '../utils';
-
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: { 
     display: 'flex',
     flexDirection: 'column',
@@ -24,7 +29,7 @@ const useStyles = makeStyles({
     borderRadius: 15 
   },
   media: {
-    height: "400px" 
+    height: 400
   },
   favorite: {
     fontSize: 40
@@ -33,13 +38,13 @@ const useStyles = makeStyles({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-  }
-}); 
+  } 
+}))
 
-const Drink = ({drink})=> {
-  const [isFavorite, setIsFavorite] = useState(false) 
-  const [ingredients, setIngredients] = useState([])  
-  const [shadow, setShadow] = useState(3) 
+const DrinkCard = ({drink})=> {
+  const [ isFavorite, setIsFavorite ] = useState(false) 
+  const [ ingredients, setIngredients ] = useState([])  
+  const [ shadow, setShadow ] = useState(3)  
 
   useEffect(()=>{
     getIngredients(drink)
@@ -50,9 +55,8 @@ const Drink = ({drink})=> {
     listFavorites,
     getIngredientsByDrink,
     setListFavorites 
-  } = useContext(DrinksContext);  
+  } = useContext(DrinksContext); 
   const classes = useStyles(); 
-
 
   const onMouseOver = () => setShadow(10);
   const onMouseOut = () => setShadow(3);
@@ -68,9 +72,7 @@ const Drink = ({drink})=> {
     const ingredientsFormated = ingredientsSorted.join(' | ')
     setIngredients(ingredientsFormated) 
   }
-
-  const {idDrink, strDrink, strDrinkThumb } = drink  
-
+  
   const handlerFavorite = async() =>{
     setIsFavorite(!isFavorite)  
     const favorites = (!isFavorite)
@@ -81,9 +83,7 @@ const Drink = ({drink})=> {
     setListFavorites(favorites)
   }
 
-  const handlerView = () => {
-
-  }
+  const { strDrink = '', strDrinkThumb = '' } = drink  
 
   return (
     <Card 
@@ -114,8 +114,8 @@ const Drink = ({drink})=> {
           }
         </IconButton>
 
-        <IconButton aria-label="share" onClick={handlerView}>
-          <AddIcon fontSize='large' />
+        <IconButton aria-label="share">
+          <AddIcon fontSize='large' /> 
         </IconButton>  
       </CardActions>
     </Card>
@@ -123,4 +123,4 @@ const Drink = ({drink})=> {
     
 }
 
-export default Drink;
+export default DrinkCard;

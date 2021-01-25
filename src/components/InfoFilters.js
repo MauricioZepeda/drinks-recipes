@@ -1,35 +1,9 @@
 import React, { useContext } from 'react';
-import { makeStyles } from '@material-ui/core/styles'; 
-
-import Grid from '@material-ui/core/Grid';
-
-// Components
-import Drink from "./Drink";
 
 // Context
 import { DrinksContext } from '../contexts/DrinksContext'; 
- 
-const ListDrinks = () => {
-  const {      
-    drinksFiltered 
-  } = useContext(DrinksContext); 
-  
-  return ( 
-    <> 
-      <Grid container justify="center">
-        <OptionsSelected />
-      </Grid>
 
-      <Grid container justify="space-around" >
-        { drinksFiltered.map(drink => (  
-          <Drink key={drink.idDrink} drink={drink} />  
-        )) } 
-      </Grid> 
-    </>
-  );
-}
-
-const OptionsSelected = ()=>{
+const InfoFilters = () => {
   const {      
     drinksFiltered,
     query 
@@ -54,4 +28,4 @@ const OptionsSelected = ()=>{
   )
 }
 
-export default ListDrinks;
+export default InfoFilters;

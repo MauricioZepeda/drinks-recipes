@@ -1,29 +1,27 @@
-import React, { useEffect, useState, useContext } from 'react'; 
-import Button from '@material-ui/core/Button';
-import Badge from '@material-ui/core/Badge'; 
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useEffect, useState, useContext } from 'react'
+
+// Components
+import Counter from './commons/Counter'
 
 // Context
-import { DrinksContext } from '../contexts/DrinksContext';
+import { DrinksContext } from '../contexts/DrinksContext'
 
-import Grid from '@material-ui/core/Grid';
+// Material-UI
+import Button from '@material-ui/core/Button' 
+import Grid from '@material-ui/core/Grid'
 
-const useStyles = makeStyles(() => ({ 
-}));
-
-const Types = () => {
-  const { listTypes } = useContext(DrinksContext);  
-  const classes = useStyles() 
+const FilterByTypes = () => {
+  const { listTypes } = useContext(DrinksContext);   
 
   return ( 
-    <>
+    <Grid container justify="center">
       { listTypes.map(type => (
         <Type 
           key={type.strAlcoholic}  
           type={type} 
         /> 
       )) }
-    </>
+    </Grid>
   )
 }
 
@@ -69,23 +67,22 @@ const Type = ({type}) => {
     })
   }
 
-  return ( 
-    <Badge 
-      max={999} 
-      badgeContent={count} 
-      color={ (count > 0) ? "primary" : "error" } 
-      showZero={ active ? true : false }
+  return (  
+    <Counter
+      count={count}
+      showZero={ active }
     >
       <Button 
         variant={ active ? "contained" : "outlined" }
         color="secondary" 
         onClick={ handlerClick }
         id={ type.strAlcoholic }
+        style={{ marginLeft: 30, marginLeft: 30 }}
       >
         { type.strAlcoholic }
-      </Button>  
-    </Badge>  
+      </Button> 
+    </Counter> 
   )
 }
 
-export default Types;
+export default FilterByTypes

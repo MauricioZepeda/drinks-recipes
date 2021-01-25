@@ -9,13 +9,13 @@ const baseIngredientImageURL = 'https://www.thecocktaildb.com/images/ingredients
 const DrinksContextProvider = ({ children }) => {
   const [ allDrinks, setAllDrinks ] = useState([])
   const [ drinksFiltered, setDrinksFiltered ] = useState([]) 
-  const [ query, setQuery ] = useState({ types: [], ingredients: [], name: '', favorite: false})
+  const [ query, setQuery ] = useState({ types: [], ingredients: [], name: '', favorite: false })
 
   const [ listIngredients, setListIngredients ] = useState([])
   const [ listTypes, setListTypes ] = useState([]) 
 
   const [ listFavorites, setListFavorites ] = useState([]) 
-
+ 
   const [ loading, setLoading ] = useState(true)
   const [ error, setError ] = useState('')
 
@@ -28,7 +28,6 @@ const DrinksContextProvider = ({ children }) => {
       .then( _ => setError(''))
       .catch( _ => setError('Error to get data from server'))      
   )
-
 
   const getFavorites = async() => {
     const favorites = await Utils.getFromLocalStorage('listFavorites')
@@ -223,12 +222,12 @@ const DrinksContextProvider = ({ children }) => {
         listFavorites,
         loading,
         error,
-        query, 
+        query,   
         getIngredientsByDrink,
         getFavorites,
         setDrinksFiltered,
         setListFavorites,
-        setQuery 
+        setQuery
       }}
     >
       {children}

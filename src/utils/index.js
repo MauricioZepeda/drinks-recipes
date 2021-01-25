@@ -13,5 +13,5 @@ export default class Utils {
 
   static getFromLocalStorage = async(key) => (
     await JSON.parse(localStorage.getItem(key))
-  )
+  ) 
 }

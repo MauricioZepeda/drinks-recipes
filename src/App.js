@@ -3,17 +3,17 @@ import { Switch, Route } from 'react-router-dom'
 import './App.css'
 
 // Views 
-import Drinks from './views/Drinks'
-import NotFound from './views/NotFound'
+import DrinksView from './views/DrinksView'
+import NotFoundView from './views/NotFoundView'
 
 // Context
 import DrinksContextProvider from './contexts/DrinksContext'; 
- 
+
 const App = () => ( 
   <DrinksContextProvider> 
     <Switch> 
-      <Route exact path='/' component={ Drinks } />   
-      <Route component={ NotFound } />
+      <Route exact path='/' component={ DrinksView } />   
+      <Route component={ NotFoundView } />
     </Switch>  
   </DrinksContextProvider>
 );

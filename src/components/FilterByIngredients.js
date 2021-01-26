@@ -111,12 +111,8 @@ const ListIngredientsSelected = ({selected = [], setIngredients}) => {
   const classes = useStyles()
 
   const getCount = ingredientName => { 
-    const drinksWithIngredient = drinksFiltered.filter(drink => {
-      const keysIngredients = Object.keys(drink).filter(key => key.includes('strIngredient'))
-      const existIngredient =  keysIngredients.some(keyName => drink[keyName] === ingredientName)  
-      return existIngredient
-    })   
-    return drinksWithIngredient.length 
+    const filtered =  drinksFiltered.filter(drink => drink.listIngredients.includes(ingredientName))  
+    return filtered.length 
   } 
 
   if(query.favorite){ 

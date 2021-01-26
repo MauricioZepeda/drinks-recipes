@@ -14,4 +14,12 @@ export default class Utils {
   static getFromLocalStorage = async(key) => (
     await JSON.parse(localStorage.getItem(key))
   ) 
+
+  static getDrinkInfoByKeyName = (drink, keyname) => { 
+    const keysFound = Object.keys(drink).filter(key => (
+      key.includes(keyname) && drink[key] 
+    ))
+    const infoFound = keysFound.map(key => drink[key].trim()) 
+    return infoFound
+  }
 }

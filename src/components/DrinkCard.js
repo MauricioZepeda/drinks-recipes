@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';  
+import noimage from '../images/noimage.svg'
 
 // Utils
 import Utils from '../utils';
@@ -52,8 +53,7 @@ const DrinkCard = ({drink})=> {
   },[]) 
   
   const { 
-    listFavorites,
-    getIngredientsByDrink,
+    listFavorites, 
     setListFavorites 
   } = useContext(DrinksContext); 
   const classes = useStyles(); 
@@ -66,10 +66,8 @@ const DrinkCard = ({drink})=> {
     setIsFavorite(exist)
   }
 
-  const getIngredients = (drink) =>{
-    const ingredients = getIngredientsByDrink(drink)
-    const ingredientsSorted = ingredients.sort()
-    const ingredientsFormated = ingredientsSorted.join(' | ')
+  const getIngredients = (drink) =>{ 
+    const ingredientsFormated = drink.listIngredients.join(' | ')
     setIngredients(ingredientsFormated) 
   }
   
@@ -83,7 +81,7 @@ const DrinkCard = ({drink})=> {
     setListFavorites(favorites)
   }
 
-  const { strDrink = '', strDrinkThumb = '' } = drink  
+  const { strDrink = '', strDrinkThumb = ''} = drink  
 
   return (
     <Card 
@@ -94,7 +92,7 @@ const DrinkCard = ({drink})=> {
     >
       <CardMedia
         className={classes.media}
-        image={strDrinkThumb}
+        image={strDrinkThumb ? strDrinkThumb : noimage}
         title={strDrink} 
       />
       <CardContent>

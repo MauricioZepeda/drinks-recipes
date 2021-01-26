@@ -60,7 +60,7 @@ const DrinksContextProvider = ({ children }) => {
             name.length > 0) 
   }
 
-  const getDrinksFilteredByQuery = async() => {
+  const getDrinksFilteredByQuery = async() => { 
     const drinksFilteredByType = query.favorite ? listFavorites : getDrinksFilteredByType() 
     const drinksFilteredByIngredients = getDrinksFilteredByIngredients(drinksFilteredByType) 
     const drinksfilteredByName = getDrinksfilteredByName(drinksFilteredByIngredients) 
@@ -75,23 +75,22 @@ const DrinksContextProvider = ({ children }) => {
         : allDrinks
   )
 
-  const getDrinksFilteredByIngredients = (drinksFilteredByType) => (
+  const getDrinksFilteredByIngredients = (listDrinks) => (
     (query.ingredients.length > 0)
-      ? drinksFilteredByType.filter(drink => {
-          const keysIngredients = Object.keys(drink).filter(key => key.includes('strIngredient'))
-          const existIngredient = keysIngredients.some(keyName => query.ingredients.includes(drink[keyName]))
-          return existIngredient
-        })
-      : drinksFilteredByType
+    ? listDrinks.filter(drink => query.ingredients.some(ingredientQuery=> ( 
+        drink.listIngredients.includes(ingredientQuery)
+      )
+    )) 
+    : listDrinks
   )
 
-  const getDrinksfilteredByName = (drinksFilteredByIngredients) => (
+  const getDrinksfilteredByName = (listDrinks) => (
     (query.name.length >0) 
-      ? (drinksFilteredByIngredients.filter(drink => { 
+      ? (listDrinks.filter(drink => { 
           const drinkName = drink.strDrink.toUpperCase() 
           return drinkName.includes(query.name.toUpperCase().trim())
         }))
-      : drinksFilteredByIngredients
+      : listDrinks
   )
 
   const getTypes = async() => {
@@ -166,7 +165,7 @@ const DrinksContextProvider = ({ children }) => {
   }  
 
   const getIngredientsFromListDrinks = async(listDrinks) => {
-    const ingredientsByDrink = listDrinks.map(drink => getIngredientsByDrink(drink))
+    const ingredientsByDrink = listDrinks.map(drink => drink.listIngredients ) 
     const listAllIngredients = ingredientsByDrink.flat() 
     const listIngredients = await Utils.removeDuplicates(listAllIngredients) 
     const ingredientsWithImage = listIngredients.map(strIngredient => getIngredientWithImage(strIngredient))  
@@ -177,15 +176,7 @@ const DrinksContextProvider = ({ children }) => {
     setLoading(false)
     return sortedIngredients
   }
-
-  const getIngredientsByDrink = drink => { 
-    const keysIngredients = Object.keys(drink).filter(key => (
-      key.includes('strIngredient') && drink[key] 
-    ))
-    const drinkIngredients = keysIngredients.map(key => drink[key].trim()) 
-    return drinkIngredients
-  }  
-
+ 
   const getCategories = async() => {
     const categories = await fetch(`${baseURL}/list.php?c=list`)  
     const listCategoriesParsed = await categories.json() 
@@ -204,7 +195,16 @@ const DrinksContextProvider = ({ children }) => {
     const drinkDetail = await fetch(`${baseURL}/lookup.php?i=${idDrink}`)  
     const drinkDetailParsed = await drinkDetail.json() 
     const {drinks} = drinkDetailParsed
-    return drinks[0]   
+    const drink = drinks[0]
+    const listIngredients = Utils.getDrinkInfoByKeyName(drink, 'strIngredient')
+    const listMeasures = Utils.getDrinkInfoByKeyName(drink, 'strMeasure')
+
+    const finalDrink = {
+      ...drink,
+      listIngredients: listIngredients.sort(),
+      listMeasures: listMeasures.sort()
+    }
+    return finalDrink 
   }
 
   const getIngredientWithImage = strIngredient => ({
@@ -222,8 +222,7 @@ const DrinksContextProvider = ({ children }) => {
         listFavorites,
         loading,
         error,
-        query,   
-        getIngredientsByDrink,
+        query,    
         getFavorites,
         setDrinksFiltered,
         setListFavorites,

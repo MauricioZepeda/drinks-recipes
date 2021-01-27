@@ -1,7 +1,7 @@
 import React from 'react'; 
 import Badge from '@material-ui/core/Badge'; 
 
-const Counter = ({ count = 0, showZero = true , children = null }) => {
+const Counter = ({ count = 0, showZero = true , children = null, invisible = false }) => {
   return ( 
     <>
       <Badge  
@@ -9,6 +9,7 @@ const Counter = ({ count = 0, showZero = true , children = null }) => {
         badgeContent={count} 
         color={ (count > 0) ? "primary" : "error"}
         showZero={ showZero ? true : false }
+        invisible={invisible}
       >
         {children}
       </Badge>       

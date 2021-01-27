@@ -9,6 +9,8 @@ import { DrinksContext } from '../contexts/DrinksContext'
 //Material-UI
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid' 
+import Box from '@material-ui/core/Box'
+
 
 const FavoritesButton = () => {
   const [active, setActive] = useState(false) 
@@ -28,22 +30,24 @@ const FavoritesButton = () => {
     setQuery({      
       types: [], 
       ingredients: [], 
-      name: '',
+      name: "",
       favorite: !active
     })
   }
 
   return(
     <Grid container justify="center">
-      <Counter count={listFavorites.length}>
-        <Button 
-          variant={ active ? "contained" : "outlined" }
-          color="secondary" 
-          onClick={ handlerClick } 
-        >
-          Favorites
-        </Button> 
-      </Counter> 
+      <Box mt={1}>  
+        <Counter count={listFavorites.length}>
+          <Button 
+            variant={ active ? "contained" : "outlined" }
+            color="secondary" 
+            onClick={ handlerClick } 
+          >
+            Favorites
+          </Button> 
+        </Counter> 
+        </Box>
     </Grid>
   )
 }

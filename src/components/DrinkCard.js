@@ -28,10 +28,10 @@ const useStyles = makeStyles((theme) => ({
     height: 550,
     marginBottom: 30,
     borderRadius: 15 
-  },
+  },  
   media: {
-    height: 400
-  },
+    height: '60%',
+  }, 
   favorite: {
     fontSize: 40
   },
@@ -81,21 +81,22 @@ const DrinkCard = ({drink})=> {
     setListFavorites(favorites)
   }
 
-  const { strDrink = '', strDrinkThumb = ''} = drink  
-
+  const { strDrink = '', strDrinkThumb = ''} = drink   
   return (
     <Card 
       className={classes.root} 
       elevation={shadow}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}     
-    >
-      <CardMedia
-        className={classes.media}
-        image={strDrinkThumb ? strDrinkThumb : noimage}
-        title={strDrink} 
-      />
-      <CardContent>
+    >       
+      <img 
+        loading="lazy"  
+        className={classes.media} 
+        src={strDrinkThumb ? strDrinkThumb : noimage} 
+        alt={strDrink} 
+      /> 
+
+      <CardContent   className={classes.information}>
         <Typography gutterBottom variant="h5">
           {strDrink}
         </Typography>

@@ -9,17 +9,18 @@ import { DrinksContext } from '../contexts/DrinksContext'
 // Material-UI
 import Button from '@material-ui/core/Button' 
 import Grid from '@material-ui/core/Grid'
+import Box from '@material-ui/core/Box'
+
 
 const FilterByTypes = () => {
   const { listTypes } = useContext(DrinksContext);   
 
   return ( 
-    <Grid container justify="center">
+    <Grid container direction="row" justify="center">
       { listTypes.map(type => (
-        <Type 
-          key={type.strAlcoholic}  
-          type={type} 
-        /> 
+        <Box mt={1} key={type.strAlcoholic}  >
+          <Type type={type} /> 
+        </Box>
       )) }
     </Grid>
   )
@@ -71,6 +72,7 @@ const Type = ({type}) => {
     <Counter
       count={count}
       showZero={ active }
+      invisible={ !active ? true : false }
     >
       <Button 
         variant={ active ? "contained" : "outlined" }

@@ -1,27 +1,37 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 
 // Context
 import { DrinksContext } from '../contexts/DrinksContext'
 
 // Metrial-UI
-import TextField from '@material-ui/core/TextField'
-import Typography from '@material-ui/core/Typography'
+import TextField from '@material-ui/core/TextField' 
 import Grid from '@material-ui/core/Grid'
+import InputAdornment from '@material-ui/core/InputAdornment';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 
-const FilterByName = () => {
-  const {       
+
+const FilterByName = () => { 
+  const {     
     query, 
     setQuery 
   } = useContext(DrinksContext)
 
-  const handlerChange = (event) => {
-    const name = event.target.value
+  const [ name, setName ] = useState(query.name)
 
-    setQuery({      
-      ...query,
-      favorite: false,
-      name
-    })
+  useEffect(()=>{ 
+    const debounce = setTimeout(()=> {
+      setQuery({      
+        ...query,
+        favorite: false,
+        name
+      })
+    }, 300)  
+    return () => clearTimeout(debounce) 
+  },[name])
+  
+  const handlerChange = (event) => {
+    const nametoSearch = event.target.value
+    setName(nametoSearch.trim()) 
   }
 
   return ( 
@@ -30,9 +40,9 @@ const FilterByName = () => {
         label='Filter by name'
         variant="outlined"   
         onChange={handlerChange} 
-        value={query.name}
-        style={{ width: 300 }}
-      />
+        value={name}
+        style={{ width: 300 }} 
+      />  
     </Grid> 
   )
 }

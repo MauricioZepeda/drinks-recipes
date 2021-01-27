@@ -15,14 +15,16 @@ import Select from '@material-ui/core/Select'
 import Chip from '@material-ui/core/Chip'
 import Typography from '@material-ui/core/Typography' 
 import Grid from '@material-ui/core/Grid'
+import Button from '@material-ui/core/Button'
+import Box from '@material-ui/core/Box'
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme) => ({
   container:{
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'center',
-    width: '88%'
+    justifyContent: 'center'
   },
   formControl: {
     paddingTop: 25,
@@ -48,10 +50,12 @@ const FilterByIngredients = () => {
   const {        
     listIngredients, 
     query, 
-    setQuery 
+    setQuery,
+    getData
   } = useContext(DrinksContext);  
   const classes = useStyles()
   
+
   const handleChange = (event) => { 
     const ingredientsSelected = event.target.value
     setIngredients(ingredientsSelected)  
@@ -62,42 +66,65 @@ const FilterByIngredients = () => {
     })
   };
 
+  const handlerClick = async() => {   
+    setIngredients([])
+    setQuery({      
+      ...query, 
+      ingredients: [],
+    })
+  }
+
   return (
-    <Grid container justify="space-around"  style={{ padding: 20 }}>
-      <div className={classes.container}> 
-        <FormControl className={classes.formControl}>
-          <InputLabel variant='filled'>   
-            <Typography variant="h4" gutterBottom>
-              Select ingredients 
-            </Typography>
-          </InputLabel>
-          <Select  
-            multiple
-            autoWidth={true}                    
-            value={ingredients}
-            onChange={handleChange}  
-            input={<Input id="select-multiple-chip" />}
-            renderValue={ selected => (
-              <ListIngredientsSelected 
-                selected={selected} 
-                setIngredients={setIngredients} 
-              />
-            )}          
-          >
-            <MenuItem value="" disabled>
-              Select ingredients 
-            </MenuItem>
-            { listIngredients.map(ingredient => (
-              <MenuItem 
-                key={ingredient.strIngredient} 
-                value={ingredient.strIngredient}
-              >
-                {ingredient.strIngredient}
+    <Grid container justify="center">
+      <Grid item xs={8}> 
+        <div className={classes.container}> 
+          <FormControl className={classes.formControl}>
+            <InputLabel variant='filled'>   
+              <Typography variant="h4" gutterBottom>
+                Select ingredients 
+              </Typography>
+            </InputLabel>
+            <Select  
+              multiple
+              autoWidth={true}                    
+              value={ingredients}
+              onChange={handleChange}  
+              input={<Input id="select-multiple-chip" />}
+              renderValue={ selected => (
+                <ListIngredientsSelected 
+                  selected={selected} 
+                  setIngredients={setIngredients} 
+                />
+              )}          
+            >
+              <MenuItem value="" disabled>
+                Select ingredients 
               </MenuItem>
-            )) }
-          </Select>
-        </FormControl>
-      </div>
+              { listIngredients.map(ingredient => (
+                <MenuItem 
+                  key={ingredient.strIngredient} 
+                  value={ingredient.strIngredient}
+                >
+                  {ingredient.strIngredient}
+                </MenuItem>
+              )) }
+            </Select>
+          </FormControl>
+        </div>
+      </Grid>
+
+      <Grid item xs={2} style={{display: ingredients.length > 0 ? 'block' : 'none'}}>
+        <Box mt={6} ml={10}>
+          <Button 
+            variant="contained"
+            color="secondary" 
+            onClick={ handlerClick } 
+          >
+            <HighlightOffIcon fontSize="large" />
+              Clear Ingredients
+          </Button>  
+        </Box> 
+      </Grid>
     </Grid>
   );
 }

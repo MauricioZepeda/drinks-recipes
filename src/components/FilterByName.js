@@ -5,9 +5,7 @@ import { DrinksContext } from '../contexts/DrinksContext'
 
 // Metrial-UI
 import TextField from '@material-ui/core/TextField' 
-import Grid from '@material-ui/core/Grid'
-import InputAdornment from '@material-ui/core/InputAdornment';
-import AccountCircle from '@material-ui/icons/AccountCircle';
+import Grid from '@material-ui/core/Grid' 
 
 
 const FilterByName = () => { 
@@ -27,7 +25,7 @@ const FilterByName = () => {
       })
     }, 300)  
     return () => clearTimeout(debounce) 
-  },[name])
+  },[name, query.name])
   
   const handlerChange = (event) => {
     const nametoSearch = event.target.value

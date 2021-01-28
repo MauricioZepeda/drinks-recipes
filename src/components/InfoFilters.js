@@ -1,38 +1,42 @@
 import React, { useContext } from 'react';
 
 // Context
-import { DrinksContext } from '../contexts/DrinksContext'; 
+import { DrinksContext } from '../contexts/DrinksContext';  
+import { Favorite, Message, Search } from '../utils/Message';
+
+// Material-UI
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
 
 const InfoFilters = () => {
   const {      
     drinksFiltered,
     query 
-  } = useContext(DrinksContext); 
+  } = useContext(DrinksContext);  
 
-  const getOptions = () => {
-    const { types, ingredients, name, favorite } = query
-
-    const existsData = drinksFiltered.length > 0
+  const messages = () => {
+    const { types, ingredients, name, favorite } = query 
+    if(favorite){
+      const favoriteMsg = new Favorite(drinksFiltered.length) 
+      return favoriteMsg.getMessage()
+    }
+    
     const existsQuery = types.length > 0 || ingredients.length > 0 || name.length > 0 
+    if(existsQuery){
+      const searchMsg = new Search(drinksFiltered.length, query) 
+      return searchMsg.getMessage()
+    }
 
-    const initialMessage = 'Look for some recipes' 
-    const isFavorite =  favorite ? ' on your favorites' : ''
-    const drinksFound = `${drinksFiltered.length} drinks found ${isFavorite}`
-    const noDrinksFound = `No drinks found ${ isFavorite }`
-    const favoriteMessage =  favorite 
-                              ? `${drinksFiltered.length } drinks on favorites` 
-                              : initialMessage   
-
-    const message = (existsData && existsQuery) 
-                      ? drinksFound 
-                      : !existsQuery 
-                          ? favoriteMessage 
-                          : noDrinksFound 
-    return message
+    const initialMsg = new Message()
+    return initialMsg.getMessage()
   }
 
-  return (
-    <h1>{getOptions()} </h1>
+  return ( 
+    <Box my={5}>
+    <Typography variant="h4">
+        {messages()}  
+    </Typography>
+    </Box>
   )
 }
 

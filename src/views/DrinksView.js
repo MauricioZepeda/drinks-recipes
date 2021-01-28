@@ -20,11 +20,8 @@ const DrinksView = () => {
   
   return(  
     <>
-      <FilterBar />
-
-      <br /><br /><br /> 
-      <FilterByIngredients /> 
-
+      <FilterBar /> 
+      <FilterByIngredients />  
       <ListDrinksCards /> 
     </> 
   ) 

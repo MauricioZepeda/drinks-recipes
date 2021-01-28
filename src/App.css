@@ -1,9 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Baloo+Thambi+2&display=swap');  
-
 body{  
-  font-family:  'Baloo Thambi 2', cursive ;
     height: 100%;
-    margin: 0;
+    padding-top: 120px;
     background-repeat: no-repeat;
     background-attachment: fixed;
     background: rgb(173,206,227);

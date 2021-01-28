@@ -6,6 +6,7 @@ export class Message {
   constructor(){ 
     this.initialMessage = 'Look for some recipes'
     this.drinksfound = 'drinks found'
+    this.drinkfound = 'drink found'
     this.noDrinksFound = 'No drinks found'
   }
 
@@ -24,47 +25,54 @@ export class Search extends Message {
   
   getMessage = () => (
     this.total > 0  
-      ? `${this.found()}  ${this.getFilterResume()}`
+      ? `${this.found()} ${this.getFilterResume()}`
       : `${this.notFound()}  ${this.getFilterResume()}`
   ) 
 
   found = () => (
-    `${this.total} ${this.drinksfound}`
+    `${this.total} ${ (this.total === 1) ? this.drinkfound : this.drinksfound},`
   )
 
   notFound = () =>  this.noDrinksFound
 
-  checkPluralWord = (count) =>{
+  checkPluralWord = (word, count) =>{
     const plural = count > 1 ? 's' : '' 
-    return plural
+    return word + plural
   }
 
   getTypes = () => { 
     const countTypes = this.query.types.length
     return (countTypes > 0) 
-      ? `${countTypes} type${this.checkPluralWord(countTypes)}`
+      ? `${countTypes} ${this.checkPluralWord('type', countTypes)}`
       : null
   }
 
   getIngredients = () => {
     const countIngredients = this.query.ingredients.length   
     return (countIngredients > 0) 
-    ? `${this.query.ingredients.length} ingredient${this.checkPluralWord(countIngredients)}`
+    ? `${this.query.ingredients.length} ${this.checkPluralWord('ingredient', countIngredients)}`
     : null
   }
 
   getName = () => (
     this.query.name.length > 0 
-      ? 'a name' 
+      ? `name "${this.query.name}"` 
       : null
   )
 
   getFilterResume = () => {
     const resume = [this.getName(), this.getTypes(), this.getIngredients()]
     const resumeFinal = resume.filter(msg=>msg)
-    const filteredBy = `filtered by ${resumeFinal.join(', ')}`
+    const filters = resumeFinal.length === 1 ?  resumeFinal[0] :  this.getFilters(resumeFinal)
+    const filteredBy = `filtered by: ${ filters }`
     return filteredBy
   }
+
+  getFilters = (resumeFinal) => (
+    (resumeFinal.length === 2) 
+      ? `${resumeFinal[0]} and ${resumeFinal[1]}`
+      : `${resumeFinal[0]}, ${resumeFinal[1]} and ${resumeFinal[2]}` 
+  )
 }
 
 export class Favorite extends Message {

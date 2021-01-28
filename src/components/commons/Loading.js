@@ -8,7 +8,9 @@ const Loading = () => {
   return ( 
     <Grid container justify="center" alignItems="center" direction="column"> 
       <Grid item xs={1} >
-        <SyncLoader />
+        <Box paddingTop={30}>
+          <SyncLoader />
+        </Box>
       </Grid> 
     </Grid>  
   )

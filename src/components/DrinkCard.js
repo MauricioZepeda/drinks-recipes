@@ -8,8 +8,7 @@ import Utils from '../utils';
 import { DrinksContext } from '../contexts/DrinksContext'; 
 
 // Material-UI
-import Card from "@material-ui/core/Card";
-import CardMedia from "@material-ui/core/CardMedia"; 
+import Card from "@material-ui/core/Card"; 
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from '@material-ui/core/CardActions';
 import Typography from "@material-ui/core/Typography"; 
@@ -19,7 +18,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
 import { makeStyles } from "@material-ui/core/styles"; 
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: { 
     display: 'flex',
     flexDirection: 'column',
@@ -29,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 30,
     borderRadius: 15 
   },  
-  media: {
+  image: {
     height: '60%',
   }, 
   favorite: {
@@ -97,7 +96,7 @@ const DrinkCard = ({drink})=> {
     >       
       <img 
         loading="lazy"  
-        className={classes.media} 
+        className={classes.image} 
         src={strDrinkThumb ? strDrinkThumb : noimage} 
         alt={strDrink} 
       /> 

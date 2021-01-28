@@ -30,7 +30,7 @@ const FavoritesButton = () => {
     setQuery({      
       types: [], 
       ingredients: [], 
-      name: "",
+      name: '',
       favorite: !active
     })
   }

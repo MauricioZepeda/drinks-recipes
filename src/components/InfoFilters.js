@@ -21,7 +21,7 @@ const InfoFilters = () => {
       return favoriteMsg.getMessage()
     }
     
-    const existsQuery = types.length > 0 || ingredients.length > 0 || name.length > 0 
+    const existsQuery = types.length > 0 || ingredients.length > 0 || name.trim() !== '' 
     if(existsQuery){
       const searchMsg = new Search(drinksFiltered.length, query) 
       return searchMsg.getMessage()

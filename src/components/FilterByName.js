@@ -17,19 +17,21 @@ const FilterByName = () => {
   const [ name, setName ] = useState(query.name)
 
   useEffect(()=>{ 
-    const debounce = setTimeout(()=> {
-      setQuery({      
-        ...query,
-        favorite: false,
-        name
-      })
-    }, 300)  
-    return () => clearTimeout(debounce) 
+    if(!query.favorite) {
+      const debounce = setTimeout(()=> {
+        setQuery({      
+          ...query,
+          favorite: false,
+          name: name  
+        })
+      }, 300)  
+      return () => clearTimeout(debounce)  
+    }
   },[name, query.name])
   
   const handlerChange = (event) => {
     const nametoSearch = event.target.value
-    setName(nametoSearch.trim()) 
+    setName(nametoSearch) 
   }
 
   return ( 

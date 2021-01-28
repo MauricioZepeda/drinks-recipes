@@ -54,7 +54,9 @@ const DrinkCard = ({drink})=> {
   
   const { 
     listFavorites, 
-    setListFavorites 
+    getDrinkSelectedDetail,
+    setListFavorites,
+    setDrinkToView
   } = useContext(DrinksContext); 
   const classes = useStyles(); 
 
@@ -81,6 +83,10 @@ const DrinkCard = ({drink})=> {
     setListFavorites(favorites)
   }
 
+  const handlerViewDetails = () => {
+    getDrinkSelectedDetail(drink.idDrink)
+  }
+
   const { strDrink = '', strDrinkThumb = ''} = drink   
   return (
     <Card 
@@ -96,7 +102,7 @@ const DrinkCard = ({drink})=> {
         alt={strDrink} 
       /> 
 
-      <CardContent   className={classes.information}>
+      <CardContent className={classes.information}>
         <Typography gutterBottom variant="h5">
           {strDrink}
         </Typography>
@@ -113,7 +119,7 @@ const DrinkCard = ({drink})=> {
           }
         </IconButton>
 
-        <IconButton aria-label="share">
+        <IconButton aria-label="view details" onClick={handlerViewDetails}>
           <AddIcon fontSize='large' /> 
         </IconButton>  
       </CardActions>

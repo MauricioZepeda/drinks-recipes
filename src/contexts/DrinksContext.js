@@ -15,7 +15,8 @@ const DrinksContextProvider = ({ children }) => {
   const [ listTypes, setListTypes ] = useState([]) 
 
   const [ listFavorites, setListFavorites ] = useState([]) 
- 
+
+  const [ drinkSelected , setDrinkSelected ] = useState(null)
   const [ loading, setLoading ] = useState(true)
   const [ error, setError ] = useState('')
 
@@ -28,6 +29,12 @@ const DrinksContextProvider = ({ children }) => {
       .then( _ => setError(''))
       .catch( _ => setError('Error to get data from server'))      
   )
+ 
+  const getDrinkSelectedDetail = idDrink => { 
+      const drink = allDrinks.find(drink => drink.idDrink === idDrink)  
+      setDrinkSelected(drink)
+      return drink
+    }
 
   const getFavorites = async() => {
     const favorites = await Utils.getFromLocalStorage('listFavorites')
@@ -41,6 +48,8 @@ const DrinksContextProvider = ({ children }) => {
   }
 
   const filterDrinks = async() => { 
+    setDrinkSelected(null)
+
     if(!existQuery() && !query.favorite){
       setDrinksFiltered([]) 
       return []
@@ -53,8 +62,7 @@ const DrinksContextProvider = ({ children }) => {
   }
 
   const existQuery = () => {
-    const { types, ingredients, name } = query  
-
+    const { types, ingredients, name } = query   
     return (types.length > 0 || 
             ingredients.length > 0 ||
             name.length > 0) 
@@ -176,7 +184,7 @@ const DrinksContextProvider = ({ children }) => {
     setLoading(false)
     return sortedIngredients
   }
- 
+
   const getCategories = async() => {
     const categories = await fetch(`${baseURL}/list.php?c=list`)  
     const listCategoriesParsed = await categories.json() 
@@ -191,7 +199,7 @@ const DrinksContextProvider = ({ children }) => {
     return listDrinks
   }
 
-  const getDrink = async(idDrink) => { 
+  const getDrink = async(idDrink) => {  
     const drinkDetail = await fetch(`${baseURL}/lookup.php?i=${idDrink}`)  
     const drinkDetailParsed = await drinkDetail.json() 
     const {drinks} = drinkDetailParsed
@@ -217,17 +225,20 @@ const DrinksContextProvider = ({ children }) => {
       value={{  
         allDrinks,
         drinksFiltered, 
+        drinkSelected,
         listIngredients,
         listTypes,
         listFavorites,
         loading,
         error,
-        query, 
-        getData,   
+        query,  
+        getData,    
         getFavorites,
         setDrinksFiltered,
+        setDrinkSelected,
+        getDrinkSelectedDetail,
         setListFavorites,
-        setQuery
+        setQuery, 
       }}
     >
       {children}

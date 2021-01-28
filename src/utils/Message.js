@@ -34,17 +34,22 @@ export class Search extends Message {
 
   notFound = () =>  this.noDrinksFound
 
+  checkPluralWord = (count) =>{
+    const plural = count > 1 ? 's' : '' 
+    return plural
+  }
+
   getTypes = () => { 
     const countTypes = this.query.types.length
     return (countTypes > 0) 
-      ? `${countTypes} types`
+      ? `${countTypes} type${this.checkPluralWord(countTypes)}`
       : null
   }
 
   getIngredients = () => {
-    const countIngredients = this.query.ingredients.length > 0 
+    const countIngredients = this.query.ingredients.length   
     return (countIngredients > 0) 
-    ? `${this.query.ingredients.length} ingredients`
+    ? `${this.query.ingredients.length} ingredient${this.checkPluralWord(countIngredients)}`
     : null
   }
 

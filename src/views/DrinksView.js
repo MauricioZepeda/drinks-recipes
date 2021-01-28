@@ -1,5 +1,6 @@
-import React, { useContext } from 'react'
-import { SyncLoader } from 'react-spinners'  
+import React, { useContext } from 'react' 
+import Loading from '../components/commons/Loading'
+import DrinkDetailCard from '../components/DrinkDetailCard'
 
 // Components 
 import FilterBar from '../components/FilterBar'
@@ -10,19 +11,24 @@ import ListDrinksCards from '../components/ListDrinksCards'
 import { DrinksContext } from '../contexts/DrinksContext'  
 
 const DrinksView = () => {    
-  const {       
+  const { 
+    drinkSelected,
+    setDrinkSelected,
     loading,
-    error 
+    error   
   } = useContext(DrinksContext)
   
-  if(loading) return(<SyncLoader />) 
+  if(loading) return(<Loading />) 
   if(error) return(<h1>{error}</h1>) 
   
   return(  
     <>
       <FilterBar /> 
       <FilterByIngredients />  
-      <ListDrinksCards /> 
+      {!drinkSelected && <ListDrinksCards /> }
+      {drinkSelected && <DrinkDetailCard 
+                        drink={drinkSelected} 
+                        setDrinkSelected={setDrinkSelected} /> }
     </> 
   ) 
 }   

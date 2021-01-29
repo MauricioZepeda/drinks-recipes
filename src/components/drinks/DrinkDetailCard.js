@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'; 
-import noimage from '../images/noimage.svg'
+import noimage from '../../images/noimage.svg'
 
 //Material-UI 
 import Button from '@material-ui/core/Button'
@@ -10,10 +10,12 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
+import LocalBarIcon from '@material-ui/icons/LocalBar';
 import ImageIcon from '@material-ui/icons/Image';
-import WorkIcon from '@material-ui/icons/Work';
-import BeachAccessIcon from '@material-ui/icons/BeachAccess';
+import CategoryIcon from '@material-ui/icons/Category'; 
+import LocalDrinkIcon from '@material-ui/icons/LocalDrink';
 import Divider from '@material-ui/core/Divider'; 
+import DrinksIngredients from './DrinksIngredients';
 
 
 const DrinkDetailCard = ({drink, setDrinkSelected}) => {    
@@ -52,23 +54,16 @@ const DrinkDetailCard = ({drink, setDrinkSelected}) => {
           />  
 
           <Grid item xs={6}>
+            <Box>
+              {strDrink}
+            </Box>
             <Box px={2}>  
-              <List>  
+              <List>   
+ 
                 <ListItem>
                   <ListItemAvatar>
                     <Avatar>
-                      <ImageIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText primary={`Name: ${strDrink}`}  />
-                </ListItem>
-                <Divider variant="inset" component="li" />
-
-
-                <ListItem>
-                  <ListItemAvatar>
-                    <Avatar>
-                      <WorkIcon />
+                      <LocalBarIcon />
                     </Avatar>
                   </ListItemAvatar>
                   <ListItemText primary={`Type: ${strAlcoholic}`} />
@@ -79,7 +74,7 @@ const DrinkDetailCard = ({drink, setDrinkSelected}) => {
                 <ListItem>
                   <ListItemAvatar>
                     <Avatar>
-                      <WorkIcon />
+                      <CategoryIcon />
                     </Avatar>
                   </ListItemAvatar>
                   <ListItemText primary={`Category: ${strCategory}`} /> 
@@ -90,7 +85,7 @@ const DrinkDetailCard = ({drink, setDrinkSelected}) => {
                 <ListItem>
                   <ListItemAvatar>
                     <Avatar>
-                      <WorkIcon />
+                      <LocalDrinkIcon />
                     </Avatar>
                   </ListItemAvatar>
                   <ListItemText primary={`Glass: ${strGlass}`} />
@@ -99,6 +94,12 @@ const DrinkDetailCard = ({drink, setDrinkSelected}) => {
 
 
               </List>
+            </Box>
+            <Box>
+              <DrinksIngredients 
+                listIngredients={listIngredients} 
+                listMeasures={listMeasures} 
+              />
             </Box>
           </Grid> 
         </Grid> 

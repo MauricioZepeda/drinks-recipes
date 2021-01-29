@@ -50,7 +50,7 @@ export class Search extends Message {
   getIngredients = () => {
     const countIngredients = this.query.ingredients.length   
     return (countIngredients > 0) 
-    ? `${this.query.ingredients.length} ${this.checkPluralWord('ingredient', countIngredients)}`
+    ? `${countIngredients} ${this.checkPluralWord('ingredient', countIngredients)}`
     : null
   }
 
@@ -63,7 +63,7 @@ export class Search extends Message {
   getFilterResume = () => {
     const resume = [this.getName(), this.getTypes(), this.getIngredients()]
     const resumeFinal = resume.filter(msg=>msg)
-    const filters = resumeFinal.length === 1 ?  resumeFinal[0] :  this.getFilters(resumeFinal)
+    const filters = resumeFinal.length === 1 ?  resumeFinal[0] : this.getFilters(resumeFinal)
     const filteredBy = `filtered by: ${ filters }`
     return filteredBy
   }

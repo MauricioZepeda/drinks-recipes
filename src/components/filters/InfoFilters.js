@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 
 // Context
-import { DrinksContext } from '../contexts/DrinksContext';  
-import { Favorite, Message, Search } from '../utils/Message';
+import { DrinksContext } from '../../contexts/DrinksContext' 
+import { Favorite, Message, Search } from '../../utils/Message';
 
 // Material-UI
 import Typography from '@material-ui/core/Typography';

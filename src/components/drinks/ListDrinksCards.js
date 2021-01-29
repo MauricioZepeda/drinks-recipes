@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 
 // Components
-import InfoFilters from './InfoFilters';
+import InfoFilters from '../filters/InfoFilters';
 import DrinkCard from "./DrinkCard";
 
 // Context
-import { DrinksContext } from '../contexts/DrinksContext'; 
+import { DrinksContext } from '../../contexts/DrinksContext';  
 
 // Material-UI
 import Grid from '@material-ui/core/Grid'; 

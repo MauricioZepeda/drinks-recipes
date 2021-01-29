@@ -1,10 +1,10 @@
 import React, { useContext } from 'react'
 
 // Components
-import Counter from './commons/Counter'
+import Counter from '../commons/Counter'
 
 // Context
-import { DrinksContext } from '../contexts/DrinksContext'
+import { DrinksContext } from '../../contexts/DrinksContext'
 
 // Material-UI
 import Input from '@material-ui/core/Input'

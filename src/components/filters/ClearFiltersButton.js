@@ -1,7 +1,7 @@
 import React, { useContext } from 'react' 
 
 // Context
-import { DrinksContext } from '../contexts/DrinksContext'
+import { DrinksContext } from '../../contexts/DrinksContext'
 
 //Material-UI
 import Button from '@material-ui/core/Button'

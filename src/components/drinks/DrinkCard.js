@@ -1,11 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react';  
-import noimage from '../images/noimage.svg'
+import noimage from '../../images/noimage.svg'
 
 // Utils
-import Utils from '../utils';
+import Utils from '../../utils';
 
 // Context
-import { DrinksContext } from '../contexts/DrinksContext'; 
+import { DrinksContext } from '../../contexts/DrinksContext'; 
 
 // Material-UI
 import Card from "@material-ui/core/Card"; 

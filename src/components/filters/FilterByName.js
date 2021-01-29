@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 
 // Context
-import { DrinksContext } from '../contexts/DrinksContext'
+import { DrinksContext } from '../../contexts/DrinksContext'
 
 // Metrial-UI
 import TextField from '@material-ui/core/TextField' 

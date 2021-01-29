@@ -1,11 +1,11 @@
 import React, { useContext } from 'react' 
-import Loading from '../components/commons/Loading'
-import DrinkDetailCard from '../components/DrinkDetailCard'
 
 // Components 
-import FilterBar from '../components/FilterBar'
-import FilterByIngredients from '../components/FilterByIngredients'
-import ListDrinksCards from '../components/ListDrinksCards'
+import Loading from '../components/commons/Loading'
+import FilterBar from '../components/filters/FilterBar'
+import FilterByIngredients from '../components/filters/FilterByIngredients'
+import ListDrinksCards from '../components/drinks/ListDrinksCards'
+import DrinkDetailCard from '../components/drinks/DrinkDetailCard'
 
 // Context
 import { DrinksContext } from '../contexts/DrinksContext'  

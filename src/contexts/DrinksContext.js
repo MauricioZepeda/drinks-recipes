@@ -3,8 +3,7 @@ import Utils from '../utils'
 
 export const DrinksContext = createContext()
 
-const baseURL = "https://www.thecocktaildb.com/api/json/v1/1"
-const baseIngredientImageURL = 'https://www.thecocktaildb.com/images/ingredients'
+const baseURL = "https://www.thecocktaildb.com/api/json/v1/1" 
 
 const DrinksContextProvider = ({ children }) => {
   const [ allDrinks, setAllDrinks ] = useState([])
@@ -29,7 +28,7 @@ const DrinksContextProvider = ({ children }) => {
       .then( _ => setError(''))
       .catch( _ => setError('Error to get data from server'))      
   )
- 
+
   const getDrinkSelectedDetail = idDrink => { 
       const drink = allDrinks.find(drink => drink.idDrink === idDrink)  
       setDrinkSelected(drink)
@@ -176,7 +175,7 @@ const DrinksContextProvider = ({ children }) => {
     const ingredientsByDrink = listDrinks.map(drink => drink.listIngredients ) 
     const listAllIngredients = ingredientsByDrink.flat() 
     const listIngredients = await Utils.removeDuplicates(listAllIngredients) 
-    const ingredientsWithImage = listIngredients.map(strIngredient => getIngredientWithImage(strIngredient))  
+    const ingredientsWithImage = listIngredients.map(strIngredient => Utils.getIngredientImage(strIngredient))  
     const sortedIngredients = await Utils.sortListBy(ingredientsWithImage, 'strIngredient')
 
     await Utils.saveOnLocalStorage('listIngredients', sortedIngredients)  
@@ -214,12 +213,7 @@ const DrinksContextProvider = ({ children }) => {
     }
     return finalDrink 
   }
-
-  const getIngredientWithImage = strIngredient => ({
-    strIngredient,
-    image:`${baseIngredientImageURL}/${strIngredient}-Medium.png`
-  }) 
-
+ 
   return (
     <DrinksContext.Provider
       value={{  

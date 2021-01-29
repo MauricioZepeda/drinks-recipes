@@ -22,4 +22,13 @@ export default class Utils {
     const infoFound = keysFound.map(key => drink[key].trim()) 
     return infoFound
   }
+
+  static getIngredientImage = (strIngredient) => {
+    const baseIngredientImageURL = 'https://www.thecocktaildb.com/images/ingredients'
+    return {
+      strIngredient,
+      image: `${baseIngredientImageURL}/${strIngredient}-Small.png`
+    }
+  } 
+
 }

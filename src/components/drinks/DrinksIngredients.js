@@ -1,4 +1,5 @@
 import Utils from "../../utils"
+import Ingredient from "./Ingredient"
 
 const DrinksIngredients = ({ listIngredients = [], listMeasures = [] }) => {
 
@@ -22,8 +23,8 @@ const DrinksIngredients = ({ listIngredients = [], listMeasures = [] }) => {
   return ( 
     <>
       <ul>
-        { getIngredients().map( (info, index) => {
-          return <li key={index}> {info.ingredient} - {info.measure} <img src={info.image}></img> </li>
+        { getIngredients().map( (ingredient, index) => {
+          return <Ingredient key={index} ingredient={ingredient} />          
         }) }
       </ul>
     </>

@@ -10,13 +10,12 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
-import LocalBarIcon from '@material-ui/icons/LocalBar';
-import ImageIcon from '@material-ui/icons/Image';
+import LocalBarIcon from '@material-ui/icons/LocalBar'; 
 import CategoryIcon from '@material-ui/icons/Category'; 
 import LocalDrinkIcon from '@material-ui/icons/LocalDrink';
 import Divider from '@material-ui/core/Divider'; 
 import DrinksIngredients from './DrinksIngredients';
-
+import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered';
 
 const DrinkDetailCard = ({drink, setDrinkSelected}) => {    
 
@@ -91,8 +90,16 @@ const DrinkDetailCard = ({drink, setDrinkSelected}) => {
                   <ListItemText primary={`Glass: ${strGlass}`} />
                 </ListItem>
                 <Divider variant="inset" component="li" />
-
-
+                
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <FormatListNumberedIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary={`Instructions: ${strInstructions}`} /> 
+                </ListItem>
+          
               </List>
             </Box>
             <Box>

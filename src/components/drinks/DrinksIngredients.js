@@ -1,7 +1,19 @@
+import React, { useState, useEffect } from 'react';
 import Utils from "../../utils"
+
+// Components
 import Ingredient from "./Ingredient"
 
+// Material-UI
+import Grid from '@material-ui/core/Grid' 
+import Box from '@material-ui/core/Box' 
+
 const DrinksIngredients = ({ listIngredients = [], listMeasures = [] }) => {
+  const [ listFormated, setListFormated ] = useState([]);
+
+  useEffect(()=>{
+    getIngredients()
+  },[])
 
   const getIngredients = () => {   
     const merged = [listIngredients, listMeasures]  
@@ -16,17 +28,20 @@ const DrinksIngredients = ({ listIngredients = [], listMeasures = [] }) => {
             })
           : actualArray.map((infoMeasure, index) => ({ ...accumulated[index], measure: infoMeasure }))   
     ), []) 
-    return mixed
+    setListFormated(mixed)
   }
-    console.log(getIngredients()) 
 
   return ( 
-    <>
-      <ul>
-        { getIngredients().map( (ingredient, index) => {
-          return <Ingredient key={index} ingredient={ingredient} />          
-        }) }
-      </ul>
+    <>  
+      { listFormated.length > 0 &&
+        <Grid container justify="space-around">
+          { listFormated.map((ingredient, index) => ( 
+            <Box key={index} mx={5} mb={5}>
+              <Ingredient ingredient={ingredient} /> 
+            </Box>  
+          )) } 
+        </Grid> 
+      } 
     </>
   );
 }

@@ -4,7 +4,7 @@ export class Message {
   noDrinksFound = ''
 
   constructor(){ 
-    this.initialMessage = 'Look for some recipes'
+    this.initialMessage = 'Look for some drinks recipes'
     this.drinksfound = 'drinks found'
     this.drinkfound = 'drink found'
     this.noDrinksFound = 'No drinks found'

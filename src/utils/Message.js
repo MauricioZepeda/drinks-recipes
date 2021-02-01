@@ -82,7 +82,7 @@ export class Favorite extends Message {
   constructor(total, message, drinksfound, noDrinksFound){
     super({ message, drinksfound, noDrinksFound })
     this.total = total 
-    this.messageFavorite = 'on your favorites';
+    this.messageFavorite = 'on your favorites'
   }
 
   getMessage = () => (this.total > 0) ? this.found() : this.notFound()

@@ -1,20 +1,21 @@
-import React, { useContext } from 'react';
+import React, { useContext } from 'react'
 
 // Components
-import InfoFilters from '../filters/InfoFilters';
-import DrinkCard from "./DrinkCard";
+import InfoFilters from '../filters/InfoFilters'
+import DrinkCard from "./DrinkCard"
 
 // Context
-import { DrinksContext } from '../../contexts/DrinksContext';  
+import { DrinksContext } from '../../contexts/DrinksContext'  
 
 // Material-UI
-import Grid from '@material-ui/core/Grid'; 
+import Grid from '@material-ui/core/Grid' 
+
 
 const ListDrinksCards = () => {
   const {
     drinksFiltered 
-  } = useContext(DrinksContext); 
-  
+  } = useContext(DrinksContext) 
+
   return ( 
     <> 
       <Grid container justify="center">
@@ -29,7 +30,7 @@ const ListDrinksCards = () => {
         </Grid> 
       }
     </>
-  );
+  )
 }
 
-export default ListDrinksCards;
+export default ListDrinksCards

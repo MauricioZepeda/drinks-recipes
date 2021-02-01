@@ -1,6 +1,12 @@
 import React, { useState, useEffect, createContext } from "react" 
+
+// Utils
 import Utils from '../utils'
 
+// Constants
+import { getBaseURL } from '../constants'
+
+// Context
 export const DrinksContext = createContext()
 
 const baseURL = "https://www.thecocktaildb.com/api/json/v1/1" 
@@ -53,7 +59,7 @@ const DrinksContextProvider = ({ children }) => {
       setDrinksFiltered([]) 
       return []
     }  
-  
+
     const filteredResult = await getDrinksFilteredByQuery() 
     setDrinksFiltered(filteredResult)
 
@@ -111,7 +117,7 @@ const DrinksContextProvider = ({ children }) => {
   }
 
   const getTypesFromServer = async() => {
-    const types = await fetch(`${baseURL}/list.php?a=list`)  
+    const types = await fetch(`${ getBaseURL() }/list.php?a=list`)  
     const listTypesParsed = await types.json() 
     const { drinks: listTypes } = listTypesParsed  
 
@@ -185,21 +191,21 @@ const DrinksContextProvider = ({ children }) => {
   }
 
   const getCategories = async() => {
-    const categories = await fetch(`${baseURL}/list.php?c=list`)  
+    const categories = await fetch(`${ getBaseURL() }/list.php?c=list`)  
     const listCategoriesParsed = await categories.json() 
     const { drinks: listCategories } = listCategoriesParsed  
     return listCategories
   }
 
   const getDrinksByCategory = async(strCategory) => {  
-    const drinks = await fetch(`${baseURL}/filter.php?c=${strCategory}`)  
+    const drinks = await fetch(`${ getBaseURL() }/filter.php?c=${strCategory}`)  
     const listDrinksParsed = await drinks.json() 
     const { drinks: listDrinks } = listDrinksParsed  
     return listDrinks
   }
 
   const getDrink = async(idDrink) => {  
-    const drinkDetail = await fetch(`${baseURL}/lookup.php?i=${idDrink}`)  
+    const drinkDetail = await fetch(`${ getBaseURL() }/lookup.php?i=${idDrink}`)  
     const drinkDetailParsed = await drinkDetail.json() 
     const {drinks} = drinkDetailParsed
     const drink = drinks[0]
@@ -213,7 +219,7 @@ const DrinksContextProvider = ({ children }) => {
     }
     return finalDrink 
   }
- 
+
   return (
     <DrinksContext.Provider
       value={{  

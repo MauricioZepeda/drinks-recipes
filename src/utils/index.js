@@ -1,3 +1,6 @@
+// Constants
+import { getImageURL } from '../constants'
+
 export default class Utils {   
   static sortListBy = async (list, sortBy) => (
     await list.sort((a, b) => a[sortBy].localeCompare(b[sortBy])) 
@@ -23,12 +26,8 @@ export default class Utils {
     return infoFound
   }
 
-  static getIngredientImage = (strIngredient) => {
-    const baseIngredientImageURL = 'https://www.thecocktaildb.com/images/ingredients'
-    return {
-      strIngredient,
-      image: `${baseIngredientImageURL}/${strIngredient}-Small.png`
-    }
-  } 
-
+  static getIngredientImage = (strIngredient) => ({
+    strIngredient,
+    image: getImageURL(strIngredient) 
+  })
 }

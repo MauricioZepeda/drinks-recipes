@@ -10,11 +10,13 @@ import NotFoundView from './views/NotFoundView'
 import DrinksContextProvider from './contexts/DrinksContext'; 
 
 const App = () => ( 
-  <Switch> 
-      <DrinksContextProvider> 
-      <Route exact path='/' component={ DrinksView } />   
-  </DrinksContextProvider>
-      <Route component={ NotFoundView } />
+  <Switch>  
+      <Route exact path='/'>
+        <DrinksContextProvider> 
+          <DrinksView />
+        </DrinksContextProvider>
+      </Route> 
+      <Route component={ NotFoundView } /> 
     </Switch>  
 );
 

@@ -1,9 +1,10 @@
-import React from 'react'; 
-import Typography from '@material-ui/core/Typography'; 
-import { Grid } from '@material-ui/core';
+import React from 'react' 
+import Typography from '@material-ui/core/Typography' 
+import { Grid } from '@material-ui/core'
 
- 
-export default function Ingredient({ingredient}) {  
+
+export default function Ingredient({ingredient}) {   
+  if(!ingredient.image) return null
   return ( 
     <Grid container direction='column'>  
       <Grid item>  
@@ -22,6 +23,5 @@ export default function Ingredient({ingredient}) {
         </Typography> 
       </Grid>
     </Grid>  
-  );
+  )
 }
-  

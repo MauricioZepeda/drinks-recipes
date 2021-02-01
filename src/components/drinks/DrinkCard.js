@@ -1,22 +1,23 @@
-import React, { useState, useContext, useEffect } from 'react';  
+import React, { useState, useContext, useEffect } from 'react'  
 import noimage from '../../images/noimage.svg'
 
 // Utils
-import Utils from '../../utils';
+import Utils from '../../utils'
 
 // Context
-import { DrinksContext } from '../../contexts/DrinksContext'; 
+import { DrinksContext } from '../../contexts/DrinksContext' 
 
 // Material-UI
-import Card from "@material-ui/core/Card"; 
-import CardContent from "@material-ui/core/CardContent";
-import CardActions from '@material-ui/core/CardActions';
-import Typography from "@material-ui/core/Typography"; 
-import IconButton from '@material-ui/core/IconButton';  
-import AddIcon from '@material-ui/icons/Add';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
-import { makeStyles } from "@material-ui/core/styles"; 
+import Card from "@material-ui/core/Card" 
+import CardContent from "@material-ui/core/CardContent"
+import CardActions from '@material-ui/core/CardActions'
+import Typography from "@material-ui/core/Typography" 
+import IconButton from '@material-ui/core/IconButton'  
+import AddIcon from '@material-ui/icons/Add'
+import FavoriteIcon from '@material-ui/icons/Favorite'
+import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined'
+import { makeStyles } from "@material-ui/core/styles" 
+
 
 const useStyles = makeStyles(() => ({
   root: { 
@@ -50,20 +51,20 @@ const DrinkCard = ({drink})=> {
     getIngredients(drink)
     checkFavorite(drink)
   },[]) 
-  
+
   const { 
     listFavorites, 
     getDrinkSelectedDetail,
-    setListFavorites,
-    setDrinkToView
-  } = useContext(DrinksContext); 
-  const classes = useStyles(); 
+    setListFavorites 
+  } = useContext(DrinksContext) 
 
-  const onMouseOver = () => setShadow(10);
-  const onMouseOut = () => setShadow(3);
+  const classes = useStyles() 
+
+  const onMouseOver = () => setShadow(10)
+  const onMouseOut = () => setShadow(3)
 
   const checkFavorite = (drink) => {
-    const exist = listFavorites.some(favorite=> favorite.idDrink === drink.idDrink)
+    const exist = listFavorites.some(favorite => favorite.idDrink === drink.idDrink)
     setIsFavorite(exist)
   }
 
@@ -71,22 +72,21 @@ const DrinkCard = ({drink})=> {
     const ingredientsFormated = drink.listIngredients.join(' | ')
     setIngredients(ingredientsFormated) 
   }
-  
+
   const handlerFavorite = async() =>{
     setIsFavorite(!isFavorite)  
     const favorites = (!isFavorite)
-    ? [...listFavorites, drink] 
-    : listFavorites.filter(favorite => favorite.idDrink !== drink.idDrink)  
+                        ? [...listFavorites, drink] 
+                        : listFavorites.filter(favorite => favorite.idDrink !== drink.idDrink)  
     
     await Utils.saveOnLocalStorage("listFavorites", favorites)
     setListFavorites(favorites)
   }
 
-  const handlerViewDetails = () => {
-    getDrinkSelectedDetail(drink.idDrink)
-  }
+  const handlerViewDetails = () => getDrinkSelectedDetail(drink.idDrink)
 
-  const { strDrink = '', strDrinkThumb = ''} = drink   
+  const { strDrink = '', strDrinkThumb = '' } = drink   
+
   return (
     <Card 
       className={classes.root} 
@@ -123,8 +123,7 @@ const DrinkCard = ({drink})=> {
         </IconButton>  
       </CardActions>
     </Card>
-  );
-    
+  ) 
 }
 
-export default DrinkCard;
+export default DrinkCard

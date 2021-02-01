@@ -10,6 +10,7 @@ import DrinkDetailCard from '../components/drinks/DrinkDetailCard'
 // Context
 import { DrinksContext } from '../contexts/DrinksContext'  
 
+
 const DrinksView = () => {    
   const { 
     drinkSelected,
@@ -17,10 +18,10 @@ const DrinksView = () => {
     loading,
     error   
   } = useContext(DrinksContext)
-  
+
   if(loading) return(<Loading />) 
   if(error) return(<h1>{error}</h1>) 
-  
+
   return(  
     <>
       <FilterBar /> 

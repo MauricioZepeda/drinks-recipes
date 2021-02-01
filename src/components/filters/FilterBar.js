@@ -10,6 +10,7 @@ import Grid from '@material-ui/core/Grid'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar' 
 
+
 const FilterBar = () => {     
   return(   
     <AppBar position="fixed" color='default'>

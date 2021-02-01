@@ -1,5 +1,6 @@
 import { SyncLoader } from 'react-spinners' 
 
+// Material-UI
 import Grid from '@material-ui/core/Grid' 
 import Box from '@material-ui/core/Box'
 
@@ -16,4 +17,4 @@ const Loading = () => {
   )
 }
 
-export default Loading;
+export default Loading

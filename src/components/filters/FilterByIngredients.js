@@ -17,8 +17,9 @@ import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 import Box from '@material-ui/core/Box'
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff'
 import { makeStyles } from '@material-ui/core/styles'
+
 
 const useStyles = makeStyles((theme) => ({
   container:{
@@ -43,16 +44,15 @@ const useStyles = makeStyles((theme) => ({
   noLabel: {
     marginTop: theme.spacing(3),
   },
-}));
+}))
 
 const FilterByIngredients = () => { 
   const [ingredients, setIngredients] = React.useState([]) 
   const {        
     listIngredients, 
     query, 
-    setQuery,
-    getData
-  } = useContext(DrinksContext);  
+    setQuery 
+  } = useContext(DrinksContext)  
   const classes = useStyles()
   
 
@@ -64,7 +64,7 @@ const FilterByIngredients = () => {
       favorite: false,
       ingredients: ingredientsSelected,
     })
-  };
+  }
 
   const handlerClick = async() => {   
     setIngredients([])
@@ -126,14 +126,14 @@ const FilterByIngredients = () => {
         </Box> 
       </Grid>
     </Grid>
-  );
+  )
 }
 
 const ListIngredientsSelected = ({selected = [], setIngredients}) => {
   const {       
     drinksFiltered,   
     query 
-  } = useContext(DrinksContext); 
+  } = useContext(DrinksContext) 
 
   const classes = useStyles()
 
@@ -167,4 +167,4 @@ const ListIngredientsSelected = ({selected = [], setIngredients}) => {
   )    
 }
 
-export default FilterByIngredients;
+export default FilterByIngredients

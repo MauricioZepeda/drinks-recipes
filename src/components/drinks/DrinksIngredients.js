@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
+
+// Utils
 import Utils from "../../utils"
 
 // Components
@@ -8,8 +10,9 @@ import Ingredient from "./Ingredient"
 import Grid from '@material-ui/core/Grid' 
 import Box from '@material-ui/core/Box' 
 
+
 const DrinksIngredients = ({ listIngredients = [], listMeasures = [] }) => {
-  const [ listFormated, setListFormated ] = useState([]);
+  const [ listFormated, setListFormated ] = useState([])
 
   useEffect(()=>{
     getIngredients()
@@ -27,7 +30,7 @@ const DrinksIngredients = ({ listIngredients = [], listMeasures = [] }) => {
               } 
             })
           : actualArray.map((infoMeasure, index) => ({ ...accumulated[index], measure: infoMeasure }))   
-    ), []) 
+    ), [])  
     setListFormated(mixed)
   }
 
@@ -43,7 +46,7 @@ const DrinksIngredients = ({ listIngredients = [], listMeasures = [] }) => {
         </Grid> 
       } 
     </>
-  );
+  )
 }
 
-export default DrinksIngredients;
+export default DrinksIngredients

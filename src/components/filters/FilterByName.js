@@ -28,7 +28,7 @@ const FilterByName = () => {
       return () => clearTimeout(debounce)  
     }
   },[name, query.name])
-  
+
   const handlerChange = (event) => {
     const nametoSearch = event.target.value
     setName(nametoSearch) 

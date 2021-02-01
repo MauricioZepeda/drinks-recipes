@@ -1,5 +1,7 @@
-import React from 'react'; 
-import Badge from '@material-ui/core/Badge'; 
+import React from 'react' 
+
+// Material-UI
+import Badge from '@material-ui/core/Badge' 
 
 
 const Counter = ({ count = 0, showZero = true , children = null, invisible = false }) => {
@@ -15,7 +17,7 @@ const Counter = ({ count = 0, showZero = true , children = null, invisible = fal
         {children}
       </Badge>       
     </>
-  );
+  )
 }
 
-export default Counter;
+export default Counter

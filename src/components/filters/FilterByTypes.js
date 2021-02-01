@@ -13,7 +13,7 @@ import Box from '@material-ui/core/Box'
 
 
 const FilterByTypes = () => {
-  const { listTypes } = useContext(DrinksContext);   
+  const { listTypes } = useContext(DrinksContext)   
 
   return ( 
     <Grid container direction="row" justify="center">
@@ -30,12 +30,12 @@ const Type = ({type}) => {
   const [active, setActive] = useState(false)
   const [count, setCount] = useState(0)
 
-  const { drinksFiltered } = useContext(DrinksContext); 
+  const { drinksFiltered } = useContext(DrinksContext) 
 
   const {      
     query, 
     setQuery
-  } = useContext(DrinksContext); 
+  } = useContext(DrinksContext) 
 
   useEffect(()=>{ 
     const total = active ? getCount() : 0

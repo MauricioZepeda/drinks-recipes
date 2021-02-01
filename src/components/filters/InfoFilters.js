@@ -1,18 +1,19 @@
-import React, { useContext } from 'react';
+import React, { useContext } from 'react'
 
 // Context
 import { DrinksContext } from '../../contexts/DrinksContext' 
-import { Favorite, Message, Search } from '../../utils/Message';
+import { Favorite, Message, Search } from '../../utils/Message'
 
 // Material-UI
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography'
+import Box from '@material-ui/core/Box'
+
 
 const InfoFilters = () => {
   const {      
     drinksFiltered,
     query 
-  } = useContext(DrinksContext);  
+  } = useContext(DrinksContext)  
 
   const messages = () => {
     const { types, ingredients, name, favorite } = query 
@@ -40,4 +41,4 @@ const InfoFilters = () => {
   )
 }
 
-export default InfoFilters; 
+export default InfoFilters 

@@ -1,8 +1,20 @@
 # Drinks Recipes
  
-To run this proyect, clone this repository. 
+To run this proyect, first clone this repository. 
 
-After that you can type one of the following commands
+
+
+After that install the project packages with
+
+### `yarn install`
+
+or 
+
+### `npm install`
+
+
+
+Finally you can type one of the following commands
 
 ### `yarn start`
 
@@ -10,6 +22,6 @@ or
 
 ### `npm start`
 
-this runs the app in the development mode.\
+This runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
  
